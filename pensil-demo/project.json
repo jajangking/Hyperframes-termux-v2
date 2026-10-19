@@ -1,0 +1,13 @@
+{
+  "name": "pensil-demo",
+  "canvas": { "w": 1080, "h": 1920 },
+  "paths": {
+    "vo": "/data/data/com.termux/files/home/video/dokumenter-bensin/assets/vo",
+    "audio": "assets/audio",
+    "work": "work",
+    "compositions": "compositions",
+    "work_prefix": "../work",
+    "audio_prefix": "../assets/audio"
+  },
+  "scenes": ["scenes/bab5.py"]
+}

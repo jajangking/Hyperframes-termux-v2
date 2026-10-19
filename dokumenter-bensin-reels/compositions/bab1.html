@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="../assets/audio/../gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #082a4e; }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden;
+              font-family: "DejaVu Sans Mono", "Liberation Mono", monospace; }
+      #stage { position: absolute; inset: 0; background: #082a4e; overflow: hidden; }
+
+      #world {
+        position: absolute; top: 0; left: 0; width: 7200px; height: 4060px;
+        will-change: transform;
+        background-color: #0b2f56;
+        background-image:
+          linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px),
+          linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+        background-size: 30px 30px, 30px 30px, 150px 150px, 150px 150px;
+      }
+      #sheet { position: absolute; top: 0; left: 0; color: #a9d8ff; }
+
+      .meta { position: absolute; color: #cfe9ff; text-transform: uppercase; }
+      .tlblk { top: 44px; left: 40px; }
+      .bab { font-size: 32px; font-weight: 700; letter-spacing: 6px; color: #7ef0ff; }
+      .ttl { font-size: 20px; letter-spacing: 6px; margin-top: 8px; opacity: .9; }
+      .trblk { top: 52px; right: 40px; text-align: right; font-size: 18px;
+               letter-spacing: 4px; opacity: .7; line-height: 1.7; }
+
+      #opening { position: absolute; inset: 0; display: flex; flex-direction: column;
+                 align-items: center; justify-content: center; opacity: 0; }
+      #opening .t1 { font-size: 104px; font-weight: 700; letter-spacing: 12px;
+                     color: #eaf6ff; text-align: center; line-height: 1.05;
+                     text-shadow: 0 6px 34px rgba(0,0,0,.95); }
+      #opening .t2 { margin-top: 22px; font-size: 30px; letter-spacing: 9px;
+                     color: #7ef0ff; text-align: center; }
+      /* kartu hook: pertanyaan besar, bab + judul jadi subjudul */
+      #opening.hook .t1 { font-size: 44px; letter-spacing: 2.5px; line-height: 1.32;
+                          max-width: 980px; }
+      #opening.hook .t2 { font-size: 24px; letter-spacing: 7px; margin-top: 26px; }
+
+      #caps > div {
+        position: absolute; left: 0; right: 0; bottom: 26px; top: auto; height: auto;
+        width: 1080px;
+        padding: 14px 60px; text-align: center;
+        font-size: 34px; letter-spacing: 2px; color: #eaf6ff;
+        text-transform: uppercase; line-height: 1.36;
+        text-shadow: 0 3px 16px rgba(0,0,0,.98), 0 0 22px rgba(0,0,0,.9);
+      }
+
+      /* PENTING: #barwrap ikut class="clip" sehingga ikut inset:0 (top:0). */
+      #barwrap { position: absolute; left: 0; right: auto; top: auto; bottom: 0;
+                 width: 1080px; height: 10px;
+                 background: rgba(255,255,255,.13); }
+      #bar { position: absolute; left: 0; top: 0; width: 1080px; height: 10px;
+             background: linear-gradient(90deg, #7ef0ff, #eaf6ff); transform-origin: 0 50%; }
+      #vig { position: absolute; inset: 0; pointer-events: none;
+             background: radial-gradient(ellipse at center, rgba(0,0,0,0) 56%, rgba(0,0,0,.38) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="bab1" data-start="0" data-duration="27.16"
+         data-width="1080" data-height="1920">
+
+      <div id="stage" class="clip" data-start="0" data-duration="27.16" data-track-index="0">
+        <div id="world">
+          <svg id="sheet" width="7200" height="4060" viewBox="0 0 7200 4060"
+               xmlns="http://www.w3.org/2000/svg">
+            <defs>
+  <marker id="arc" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,1 L11,6 L0,11 z" fill="#7ef0ff"/>
+  </marker>
+</defs>
+        <rect id="v1Frame" class="d" x="1180" y="1400" width="840" height="1200" fill="none" stroke="#a9d8ff" stroke-width="5" opacity=".5"/>
+        <text id="v1No" class="t" x="1202" y="1452" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="700" font-family='DejaVu Sans Mono', monospace">01</text>
+        <line id="v1Ground" class="d" x1="1200" y1="2150" x2="2000" y2="2150" stroke="#e6f4ff" stroke-width="14"/>
+        <path id="v1Hatch" class="d" d="M1200,2150 l40,40M1278,2150 l40,40M1356,2150 l40,40M1434,2150 l40,40M1512,2150 l40,40M1590,2150 l40,40M1668,2150 l40,40M1746,2150 l40,40M1824,2150 l40,40M1902,2150 l40,40M1980,2150 l40,40" fill="none" stroke="#a9d8ff" stroke-width="4"/>
+        <g id="v1Car1" transform="translate(1200,2120) scale(0.5)"><path class="d" d="M0,0 h400 a44,44 0 0 0 44,-44 v-90 h-104 l-86,-84 h-132 l-86,84 h-36 v90 a44,44 0 0 0 44,44 z" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="120" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="340" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/></g><g id="v1Car2" transform="translate(1470,2120) scale(0.5)"><path class="d" d="M0,0 h400 a44,44 0 0 0 44,-44 v-90 h-104 l-86,-84 h-132 l-86,84 h-36 v90 a44,44 0 0 0 44,44 z" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="120" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="340" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/></g><g id="v1Car3" transform="translate(1740,2120) scale(0.5)"><path class="d" d="M0,0 h400 a44,44 0 0 0 44,-44 v-90 h-104 l-86,-84 h-132 l-86,84 h-36 v90 a44,44 0 0 0 44,44 z" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="120" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="340" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/></g>
+        <path id="v1Canopy" class="d" d="M1250,1560 H1900 L1875,1650 H1275 Z"
+              fill="none" stroke="#e6f4ff" stroke-width="14" stroke-linejoin="round"/>
+        <g id="v1Pillars">
+          <line class="d" x1="1330" y1="1650" x2="1330" y2="2150" stroke="#e6f4ff" stroke-width="30"/>
+          <line class="d" x1="1570" y1="1650" x2="1570" y2="2150" stroke="#e6f4ff" stroke-width="30"/>
+          <line class="d" x1="1810" y1="1650" x2="1810" y2="2150" stroke="#e6f4ff" stroke-width="30"/>
+        </g>
+        <g id="v1Pumps">
+          <rect class="d" x="1300" y="1830" width="110" height="190" rx="12" fill="none" stroke="#e6f4ff" stroke-width="11"/>
+          <rect class="d" x="1316" y="1858" width="78" height="58" fill="none" stroke="#e6f4ff" stroke-width="7"/>
+          <rect class="d" x="1620" y="1830" width="110" height="190" rx="12" fill="none" stroke="#e6f4ff" stroke-width="11"/>
+          <rect class="d" x="1636" y="1858" width="78" height="58" fill="none" stroke="#e6f4ff" stroke-width="7"/>
+        </g>
+        <text id="v1Sign" class="t" x="1575" y="1628" fill="#7ef0ff" font-size="60" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">SPBU</text>
+        <g id="v1Board">
+          <rect class="d" x="1920" y="1830" width="90" height="320" rx="10" fill="none" stroke="#e6f4ff" stroke-width="10"/>
+          <line class="d" x1="1934" y1="1930" x2="1996" y2="1930" stroke="#e6f4ff" stroke-width="6"/>
+          <line class="d" x1="1934" y1="2000" x2="1996" y2="2000" stroke="#e6f4ff" stroke-width="6"/>
+          <line class="d" x1="1934" y1="2070" x2="1996" y2="2070" stroke="#e6f4ff" stroke-width="6"/>
+        </g>
+        <text id="v1BoardTxt" class="t" x="1965" y="1900" fill="#7ef0ff" font-size="28" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">BBM</text>
+        <g id="v1Tree">
+          <line class="d" x1="1230" y1="2150" x2="1230" y2="1950" stroke="#e6f4ff" stroke-width="14"/>
+          <path class="d" d="M1230,1950 q-62,-30 -92,12" fill="none" stroke="#e6f4ff" stroke-width="11" stroke-linecap="round"/>
+          <path class="d" d="M1230,1950 q-6,-62 48,-74" fill="none" stroke="#e6f4ff" stroke-width="11" stroke-linecap="round"/>
+          <path class="d" d="M1230,1950 q62,-22 82,20" fill="none" stroke="#e6f4ff" stroke-width="11" stroke-linecap="round"/>
+        </g>
+        <path id="v1Cloud" class="d" d="M1832,1512 q26,-42 68,-28 q16,-40 60,-32 q42,6 44,44 q36,10 20,46 h-192 q-26,-16 0,-30 z"
+              fill="none" stroke="#a9d8ff" stroke-width="9"/>
+        <rect id="v2Frame" class="d" x="2780" y="1400" width="840" height="1200" fill="none" stroke="#a9d8ff" stroke-width="5" opacity=".5"/>
+        <text id="v2No" class="t" x="2802" y="1452" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="700" font-family='DejaVu Sans Mono', monospace">02</text>
+        <line id="v2Ground" class="d" x1="2790" y1="2334" x2="3610" y2="2334" stroke="#e6f4ff" stroke-width="12"/>
+        <path id="v2Hatch" class="d" d="M2790,2334 l40,40M2868,2334 l40,40M2946,2334 l40,40M3024,2334 l40,40M3102,2334 l40,40M3180,2334 l40,40M3258,2334 l40,40M3336,2334 l40,40M3414,2334 l40,40M3492,2334 l40,40M3570,2334 l40,40" fill="none" stroke="#a9d8ff" stroke-width="4"/>
+        <g id="v2Car" transform="translate(2800,2280) scale(0.9)"><path class="d" d="M0,0 h400 a44,44 0 0 0 44,-44 v-90 h-104 l-86,-84 h-132 l-86,84 h-36 v90 a44,44 0 0 0 44,44 z" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="120" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="340" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/></g>
+        <g id="v2Flap">
+          <rect class="d" x="3148" y="2166" width="46" height="46" rx="6" fill="none" stroke="#e6f4ff" stroke-width="9"/>
+          <path class="d" d="M3194,2166 q30,-16 36,22" fill="none" stroke="#e6f4ff" stroke-width="9"/>
+        </g>
+        <g id="v2Nozzle">
+          <rect class="d" x="3212" y="2174" width="64" height="42" rx="14" fill="none" stroke="#e6f4ff" stroke-width="11"/>
+          <line class="d" x1="3212" y1="2192" x2="3188" y2="2192" stroke="#e6f4ff" stroke-width="11"/>
+        </g>
+        <path id="v2Hose" class="d" d="M3276,2196 C3356,2164 3386,2122 3430,2062"
+              fill="none" stroke="#e6f4ff" stroke-width="14"/>
+        <circle id="v2Drop" class="d" cx="3182" cy="2242" r="10" fill="none" stroke="#7ef0ff" stroke-width="8"/>
+        <rect id="v2Pump" class="d" x="3430" y="1860" width="150" height="330" rx="14" fill="none" stroke="#e6f4ff" stroke-width="14"/>
+        <rect id="v2Win" class="d" x="3452" y="1900" width="106" height="84" fill="none" stroke="#e6f4ff" stroke-width="9"/>
+        <text id="v2Dig" class="t" x="3505" y="1968" fill="#7ef0ff" font-size="42" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">0 0 4 2</text>
+        <text id="v2Ltr" class="t" x="3505" y="2044" fill="#cfe9ff" font-size="26" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">LITER</text>
+        <text id="v2Tnk" class="t" x="2800" y="2040" fill="#cfe9ff" font-size="26" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">TANGKI BAHAN BAKAR</text>
+        <g id="v2Coin">
+          <circle class="d" cx="2900" cy="1876" r="64" fill="none" stroke="#7ef0ff" stroke-width="12"/>
+          <text id="v2Rp" class="t" x="2900" y="1898" fill="#7ef0ff" font-size="52" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">Rp</text>
+        </g>
+        <text id="v2Pay" class="t" x="2900" y="1780" fill="#cfe9ff" font-size="26" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">MEMBAYAR</text>
+        <g id="v2Go">
+          <path class="d" d="M3100,2430 H2870" fill="none" stroke="#7ef0ff" stroke-width="11" marker-end="url(#arc)"/>
+        </g>
+        <text id="v2GoTxt" class="t" x="3130" y="2440" fill="#7ef0ff" font-size="28" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">LALU PERGI</text>
+        <rect id="v3Frame" class="d" x="4380" y="1400" width="840" height="1200" fill="none" stroke="#a9d8ff" stroke-width="5" opacity=".5"/>
+        <text id="v3No" class="t" x="4402" y="1452" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="700" font-family='DejaVu Sans Mono', monospace">03</text>
+        <path id="v3Q" class="d" d="M4748,1516 A74,74 0 1 1 4822,1590 L4822,1660"
+              fill="none" stroke="#7ef0ff" stroke-width="24" stroke-linecap="round"/>
+        <circle id="v3Qdot" class="d" cx="4822" cy="1730" r="25" fill="none" stroke="#7ef0ff" stroke-width="24"/>
+        <text id="v3Title" class="t" x="4800" y="1906" fill="#7ef0ff" font-size="50" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">DARI MANA?</text>
+        <path id="v3Surf" class="d" d="M4420,2050 L4680,2050 q46,-30 92,0 q46,30 92,0 L5180,2050"
+              fill="none" stroke="#e6f4ff" stroke-width="13" stroke-linejoin="round"/>
+        <path id="v3Hatch" class="d" d="M4420,2050 l40,40M4506,2050 l40,40M4592,2050 l40,40M4678,2050 l40,40M4764,2050 l40,40M4850,2050 l40,40M4936,2050 l40,40M5022,2050 l40,40M5108,2050 l40,40" fill="none" stroke="#a9d8ff" stroke-width="4"/>
+        <g id="v3Sb">
+          <path class="d" d="M4490,1958 H4612 L4600,1926 H4502 Z"
+                fill="none" stroke="#e6f4ff" stroke-width="9" stroke-linejoin="round"/>
+          <rect class="d" x="4506" y="1958" width="90" height="92" fill="none" stroke="#e6f4ff" stroke-width="8"/>
+        </g>
+        <g id="v3Car" transform="translate(4700,2040) scale(0.16)"><path class="d" d="M0,0 h400 a44,44 0 0 0 44,-44 v-90 h-104 l-86,-84 h-132 l-86,84 h-36 v90 a44,44 0 0 0 44,44 z" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="120" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/><circle class="d" cx="340" cy="6" r="54" fill="none" stroke="#e6f4ff" stroke-width="40"/></g>
+        <g id="v3Strata">
+          <line class="d" x1="4460" y1="2150" x2="5180" y2="2150" stroke="#e6f4ff" stroke-width="11"/>
+          <line class="d" x1="4460" y1="2270" x2="5180" y2="2270" stroke="#e6f4ff" stroke-width="11"/>
+          <line class="d" x1="4460" y1="2390" x2="5180" y2="2390" stroke="#e6f4ff" stroke-width="11"/>
+          <line class="d" x1="4460" y1="2510" x2="5180" y2="2510" stroke="#e6f4ff" stroke-width="11"/>
+        </g>
+        <g id="v3Org">
+          <ellipse class="d" cx="4580" cy="2210" rx="36" ry="19" fill="none" stroke="#e6f4ff" stroke-width="7"/>
+          <ellipse class="d" cx="4720" cy="2218" rx="27" ry="15" fill="none" stroke="#e6f4ff" stroke-width="7"/>
+          <ellipse class="d" cx="4866" cy="2206" rx="31" ry="17" fill="none" stroke="#e6f4ff" stroke-width="7"/>
+          <ellipse class="d" cx="5002" cy="2214" rx="24" ry="13" fill="none" stroke="#e6f4ff" stroke-width="7"/>
+        </g>
+        <path id="v3Oil" class="d" d="M4662,2432 q130,-56 232,8 q92,52 40,112 q-60,72 -194,40 q-124,-32 -102,-96 q-16,-46 24,-64 z"
+              fill="none" stroke="#7ef0ff" stroke-width="14"/>
+        <g id="v3Drops">
+          <circle class="d" cx="4800" cy="2482" r="15" fill="none" stroke="#7ef0ff" stroke-width="8"/>
+          <circle class="d" cx="4924" cy="2512" r="11" fill="none" stroke="#7ef0ff" stroke-width="7"/>
+        </g>
+        <path id="v3Arrow" class="f" d="M4820,2358 V2112" fill="none" stroke="#7ef0ff" stroke-width="16" marker-end="url(#arc)"/>
+        <g id="v3Depth">
+          <line class="d" x1="5136" y1="2150" x2="5180" y2="2150" stroke="#a9d8ff" stroke-width="8"/>
+          <line class="d" x1="5136" y1="2270" x2="5180" y2="2270" stroke="#a9d8ff" stroke-width="8"/>
+          <line class="d" x1="5136" y1="2390" x2="5180" y2="2390" stroke="#a9d8ff" stroke-width="8"/>
+          <line class="d" x1="5136" y1="2510" x2="5180" y2="2510" stroke="#a9d8ff" stroke-width="8"/>
+        </g>
+        <text id="v3L1" class="t" x="4460" y="2112" fill="#cfe9ff" font-size="26" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">PERMUKAAN BUMI</text>
+        <text id="v3L2" class="t" x="4886" y="2244" fill="#cfe9ff" font-size="26" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">SISA MAKHLUK LAUT</text>
+        <text id="v3L3" class="t" x="4652" y="2348" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">MINYAK MENTAH</text>
+        <rect id="v4Frame" class="d" x="5980" y="1400" width="840" height="1200" fill="none" stroke="#a9d8ff" stroke-width="5" opacity=".5"/>
+        <text id="v4No" class="t" x="6002" y="1452" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="700" font-family='DejaVu Sans Mono', monospace">04</text>
+        <rect id="v4Block" class="d" x="6010" y="2090" width="360" height="290" rx="30" fill="none" stroke="#e6f4ff" stroke-width="14"/>
+        <g id="v4Bolts">
+          <circle class="d" cx="6046" cy="2128" r="13" fill="none" stroke="#e6f4ff" stroke-width="8"/>
+          <circle class="d" cx="6334" cy="2128" r="13" fill="none" stroke="#e6f4ff" stroke-width="8"/>
+          <circle class="d" cx="6046" cy="2346" r="13" fill="none" stroke="#e6f4ff" stroke-width="8"/>
+          <circle class="d" cx="6334" cy="2346" r="13" fill="none" stroke="#e6f4ff" stroke-width="8"/>
+        </g>
+        <rect id="v4Cyl" class="d" x="6062" y="1768" width="256" height="322" rx="16" fill="none" stroke="#e6f4ff" stroke-width="14"/>
+        <g id="v4Fin">
+          <line class="d" x1="6032" y1="1836" x2="6062" y2="1836" stroke="#a9d8ff" stroke-width="9"/>
+          <line class="d" x1="6032" y1="1906" x2="6062" y2="1906" stroke="#a9d8ff" stroke-width="9"/>
+          <line class="d" x1="6032" y1="1976" x2="6062" y2="1976" stroke="#a9d8ff" stroke-width="9"/>
+          <line class="d" x1="6318" y1="1836" x2="6348" y2="1836" stroke="#a9d8ff" stroke-width="9"/>
+          <line class="d" x1="6318" y1="1906" x2="6348" y2="1906" stroke="#a9d8ff" stroke-width="9"/>
+          <line class="d" x1="6318" y1="1976" x2="6348" y2="1976" stroke="#a9d8ff" stroke-width="9"/>
+        </g>
+        <rect id="v4Head" class="d" x="6044" y="1712" width="292" height="56" rx="10" fill="none" stroke="#e6f4ff" stroke-width="14"/>
+        <rect id="v4Piston" class="d" x="6084" y="1888" width="212" height="100" rx="12" fill="none" stroke="#e6f4ff" stroke-width="13"/>
+        <g id="v4Rings">
+          <line class="d" x1="6090" y1="1912" x2="6290" y2="1912" stroke="#e6f4ff" stroke-width="5"/>
+          <line class="d" x1="6090" y1="1936" x2="6290" y2="1936" stroke="#e6f4ff" stroke-width="5"/>
+          <line class="d" x1="6090" y1="1960" x2="6290" y2="1960" stroke="#e6f4ff" stroke-width="5"/>
+        </g>
+        <g id="v4Rod">
+          <line class="d" x1="6190" y1="1988" x2="6230" y2="2172" stroke="#e6f4ff" stroke-width="20" stroke-linecap="round"/>
+          <circle class="d" cx="6190" cy="1988" r="17" fill="none" stroke="#e6f4ff" stroke-width="10"/>
+          <circle class="d" cx="6230" cy="2172" r="17" fill="none" stroke="#e6f4ff" stroke-width="10"/>
+        </g>
+        <g id="v4Crank">
+          <circle class="d" cx="6230" cy="2250" r="88" fill="none" stroke="#e6f4ff" stroke-width="16"/>
+          <circle class="d" cx="6230" cy="2250" r="20" fill="none" stroke="#e6f4ff" stroke-width="10"/>
+          <line class="d" x1="6230" y1="2250" x2="6230" y2="2172" stroke="#e6f4ff" stroke-width="12"/>
+        </g>
+        <g id="v4Plug">
+          <rect class="d" x="6164" y="1622" width="52" height="90" rx="10" fill="none" stroke="#e6f4ff" stroke-width="12"/>
+          <line class="d" x1="6190" y1="1712" x2="6190" y2="1800" stroke="#e6f4ff" stroke-width="10"/>
+        </g>
+        <text id="v4PlugTxt" class="t" x="6190" y="1600" fill="#7ef0ff" font-size="26" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">BUSI</text>
+        <path id="v4Exh" class="d" d="M6336,1740 H6416 Q6460,1740 6460,1784 V2130"
+              fill="none" stroke="#e6f4ff" stroke-width="16" stroke-linecap="round"/>
+        <g id="v4Muff">
+          <rect class="d" x="6390" y="2130" width="330" height="130" rx="52" fill="none" stroke="#e6f4ff" stroke-width="15"/>
+          <line class="d" x1="6460" y1="2146" x2="6460" y2="2244" stroke="#e6f4ff" stroke-width="7"/>
+          <line class="d" x1="6540" y1="2146" x2="6540" y2="2244" stroke="#e6f4ff" stroke-width="7"/>
+          <line class="d" x1="6620" y1="2146" x2="6620" y2="2244" stroke="#e6f4ff" stroke-width="7"/>
+        </g>
+        <line id="v4Tail" class="d" x1="6720" y1="2195" x2="6776" y2="2195" stroke="#e6f4ff" stroke-width="20" stroke-linecap="round"/>
+        <g id="v4Smoke">
+          <circle class="d" cx="6772" cy="2106" r="40" fill="none" stroke="#7ef0ff" stroke-width="10"/>
+          <circle class="d" cx="6760" cy="2004" r="30" fill="none" stroke="#7ef0ff" stroke-width="9"/>
+          <circle class="d" cx="6754" cy="1912" r="22" fill="none" stroke="#7ef0ff" stroke-width="8"/>
+        </g>
+        <g id="v4Spark">
+          <line class="d" x1="6162" y1="1810" x2="6112" y2="1858" stroke="#7ef0ff" stroke-width="12" stroke-linecap="round"/>
+          <line class="d" x1="6190" y1="1814" x2="6190" y2="1866" stroke="#7ef0ff" stroke-width="12" stroke-linecap="round"/>
+          <line class="d" x1="6218" y1="1810" x2="6268" y2="1858" stroke="#7ef0ff" stroke-width="12" stroke-linecap="round"/>
+        </g>
+        <text id="v4MesinL" class="t" x="6190" y="2452" fill="#7ef0ff" font-size="28" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">MESIN</text>
+        <text id="v4ExhL" class="t" x="6555" y="2322" fill="#7ef0ff" font-size="28" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">KNALPOT</text>
+        <text id="v4Asap" class="t" x="6672" y="1872" fill="#7ef0ff" font-size="28" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">ASAP</text>
+        <text id="v4Title" class="t" x="6400" y="2570" fill="#7ef0ff" font-size="50" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">KE MANA?</text>
+        <path id="conn1" class="d" d="M2060,2200 H2740" fill="none" stroke="#7ef0ff" stroke-width="9" marker-end="url(#arc)"/>
+        <path id="conn2" class="d" d="M3660,2200 H4340" fill="none" stroke="#7ef0ff" stroke-width="9" marker-end="url(#arc)"/>
+        <path id="conn3" class="d" d="M5260,2200 H5940" fill="none" stroke="#7ef0ff" stroke-width="9" marker-end="url(#arc)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div id="hud" class="clip" data-start="0" data-duration="27.16" data-track-index="1">
+        <div class="meta tlblk">
+          <div class="bab">BAB 01</div>
+          <div class="ttl">PEMBUKA — PERTANYAAN</div>
+        </div>
+        <div class="meta trblk">SETETES BENSIN<br />LIVE-DRAW · 9:16</div>
+        <div id="opening" class="hook">
+          <div class="t1">Dari mana cairan di pom bensin itu datang — dan ke mana perginya?</div>
+          <div class="t2">BAB 01 · PEMBUKA — PERTANYAAN</div>
+        </div>
+      </div>
+
+      <div id="caps" class="clip" data-start="0" data-duration="27.16" data-track-index="2">
+        <div id="c0" class="clip" data-start="3.067" data-duration="4.65">JUTAAN KENDARAAN BERHENTI DI TEMPAT YANG SAMA</div>
+        <div id="c1" class="clip" data-start="7.717" data-duration="3.19">POM BENSIN</div>
+        <div id="c2" class="clip" data-start="10.905" data-duration="1.35">KITA MENGISI</div>
+        <div id="c3" class="clip" data-start="12.252" data-duration="1.14">MEMBAYAR</div>
+        <div id="c4" class="clip" data-start="13.39" data-duration="3.15">LALU PERGI</div>
+        <div id="c5" class="clip" data-start="16.543" data-duration="2.96">PERNAHKAH KITA BERTANYA?</div>
+        <div id="c6" class="clip" data-start="19.506" data-duration="3.27">DARI MANA CAIRAN INI DATANG?</div>
+        <div id="c7" class="clip" data-start="22.781" data-duration="4.08">DAN KE MANA IA PERGI SETELAH MESIN MENYALA?</div>
+      </div>
+
+      <div id="barwrap" class="clip" data-start="0" data-duration="27.16" data-track-index="3">
+        <div id="bar"></div>
+      </div>
+      <div id="vig"></div>
+
+      <audio id="sfx" src="../assets/audio/sfx-bab1.mp3"
+             data-start="0" data-duration="27.16" data-track-index="8" data-volume="1"></audio>
+      <audio id="vo" src="../assets/vo/bab1-pembuka-r.mp3"
+             data-start="0" data-duration="27.16" data-track-index="9" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const VW = 1080, VH = 1920;
+      const world = document.getElementById("world");
+
+      /* live-draw: garis disembunyikan lewat dash */
+      document.querySelectorAll(".d").forEach(function (el) {
+        var L = 0;
+        try { L = el.getTotalLength(); } catch (e) { L = 0; }
+        if (!L || !isFinite(L)) { var b = el.getBBox(); L = 2 * (b.width + b.height) + 24; }
+        el.style.strokeDasharray = L + " " + L;
+        el.style.strokeDashoffset = L;
+      });
+      document.querySelectorAll(".t, .f, #caps > div").forEach(function (el) {
+        el.style.opacity = 0;
+      });
+
+      const WORDS = [{t:3.217}, {t:3.766}, {t:4.579}, {t:5.101}, {t:5.795}, {t:6.317}, {t:6.49}, {t:6.838}, {t:7.011}, {t:7.867}, {t:8.144}, {t:11.055}, {t:11.42}, {t:12.402}, {t:13.54}, {t:13.945}, {t:16.693}, {t:17.047}, {t:17.576}, {t:17.93}, {t:18.636}, {t:19.656}, {t:19.985}, {t:20.314}, {t:20.808}, {t:21.137}, {t:22.931}, {t:23.095}, {t:23.259}, {t:23.588}, {t:23.917}, {t:24.245}, {t:24.738}, {t:25.067}];
+      const JEDA = {11: 1.8, 16: 1.8, 26: 1.0};
+      const LEAD = 3.0;
+      const CUES = [
+  [0, "#v1Frame", 1.0, "d"],
+  [0, "#v1No", 0.6, "t"],
+  [1, "#v1Ground", 1.1, "d"],
+  [1, "#v1Hatch", 1.3, "d"],
+  [2, "#v1Car1 .d", 1.4, "d"],
+  [3, "#v1Car2 .d", 1.2, "d"],
+  [4, "#v1Car3 .d", 1.2, "d"],
+  [5, "#v1Canopy", 1.4, "d"],
+  [6, "#v1Pillars .d", 1.3, "d"],
+  [7, "#v1Pumps .d", 1.4, "d"],
+  [8, "#v1Board .d", 1.1, "d"],
+  [9, "#v1Sign", 0.8, "t"],
+  [9, "#v1Tree", 1.2, "d"],
+  [9, "#conn1", 1.4, "d"],
+  [10, "#v1BoardTxt", 0.7, "t"],
+  [10, "#v1Cloud", 1.0, "d"],
+  [11, "#v2Car .d", 1.6, "d"],
+  [11, "#v2Tnk", 0.7, "t"],
+  [12, "#v2Flap .d", 1.0, "d"],
+  [12, "#v2Nozzle .d", 1.0, "d"],
+  [12, "#v2Hose", 1.3, "d"],
+  [12, "#v2Drop", 0.7, "d"],
+  [13, "#v2Pump", 1.3, "d"],
+  [13, "#v2Win", 0.9, "d"],
+  [13, "#v2Dig", 0.8, "t"],
+  [13, "#v2Ltr", 0.7, "t"],
+  [14, "#v2Coin .d", 1.2, "d"],
+  [14, "#v2Rp", 0.7, "t"],
+  [14, "#v2Pay", 0.7, "t"],
+  [15, "#v2Go .d", 0.9, "d"],
+  [15, "#v2GoTxt", 0.7, "t"],
+  [15, "#conn2", 1.4, "d"],
+  [16, "#v3Q", 1.4, "d"],
+  [17, "#v3Qdot", 0.7, "d"],
+  [18, "#v3Title", 0.8, "t"],
+  [19, "#v3Sb .d", 1.1, "d"],
+  [19, "#v3Car .d", 0.9, "d"],
+  [20, "#v3Strata .d", 1.5, "d"],
+  [21, "#v3Org .d", 1.3, "d"],
+  [21, "#v3L2", 0.7, "t"],
+  [22, "#v3Oil", 1.5, "d"],
+  [23, "#v3Drops .d", 1.0, "d"],
+  [24, "#v3Depth .d", 1.0, "d"],
+  [24, "#v3L1", 0.7, "t"],
+  [25, "#v3Arrow", 0.8, "t"],
+  [25, "#v3L3", 0.7, "t"],
+  [25, "#conn3", 1.4, "d"],
+  [26, "#v4Bolts .d", 1.0, "d"],
+  [27, "#v4Cyl", 1.1, "d"],
+  [27, "#v4Head", 0.8, "d"],
+  [27, "#v4Fin .d", 1.0, "d"],
+  [28, "#v4Piston", 1.0, "d"],
+  [28, "#v4Rings .d", 0.8, "d"],
+  [29, "#v4Rod .d", 1.0, "d"],
+  [30, "#v4Crank .d", 1.3, "d"],
+  [31, "#v4Exh", 1.3, "d"],
+  [31, "#v4Muff .d", 1.1, "d"],
+  [31, "#v4Tail", 0.6, "d"],
+  [31, "#v4ExhL", 0.7, "t"],
+  [32, "#v4Plug .d", 1.0, "d"],
+  [32, "#v4PlugTxt", 0.7, "t"],
+  [32, "#v4MesinL", 0.7, "t"],
+  [33, "#v4Spark .d", 1.0, "d"],
+  [33, "#v4Smoke .d", 1.4, "d"],
+  [33, "#v4Asap", 0.7, "t"],
+  [33, "#v4Title", 0.8, "t"]
+      ];
+      CUES.forEach(function (c) {
+        var t = WORDS[c[0]].t, sel = c[1], dur = c[2], kind = c[3];
+        if (kind === "t") {
+          tl.to(sel, { opacity: 1, duration: dur, ease: "power1.out" }, t);
+        } else {
+          tl.to(sel, { strokeDashoffset: 0, duration: dur, ease: "power1.inOut" }, t);
+        }
+      });
+
+      /* pra-gambar: digambar di dalam jeda, sebelum kalimat berikutnya mulai */
+      const PRESHOW = [
+  [11, 0.15, "#v2Frame", 0.55, "d"],
+  [11, 0.4, "#v2No", 0.4, "t"],
+  [11, 0.55, "#v2Ground", 0.65, "d"],
+  [11, 0.8, "#v2Hatch", 0.85, "d"],
+  [16, 0.15, "#v3Frame", 0.55, "d"],
+  [16, 0.4, "#v3No", 0.4, "t"],
+  [16, 0.55, "#v3Surf", 0.65, "d"],
+  [16, 0.8, "#v3Hatch", 0.85, "d"],
+  [26, 0.05, "#v4Frame", 0.4, "d"],
+  [26, 0.15, "#v4No", 0.3, "t"],
+  [26, 0.2, "#v4Block", 0.65, "d"]
+      ];
+      PRESHOW.forEach(function (c) {
+        var t = WORDS[c[0]].t - JEDA[c[0]] + c[1], sel = c[2], dur = c[3], kind = c[4];
+        if (kind === "t") {
+          tl.to(sel, { opacity: 1, duration: dur, ease: "power1.out" }, t);
+        } else {
+          tl.to(sel, { strokeDashoffset: 0, duration: dur, ease: "power1.inOut" }, t);
+        }
+      });
+
+      /* ---- kamera: diam saat menggambar, geser pelan ke gambar berikutnya ---- */
+      const CAM = [
+  [0, 1600, 2000, 0.0],
+  [11, 3200, 2000, 1.8],
+  [16, 4800, 2000, 1.8],
+  [26, 6400, 2000, 1.0]
+      ];
+      CAM.forEach(function (k) {
+        var w = k[0], t = WORDS[w].t, lead = k[3];
+        var tx = VW / 2 - k[1], ty = VH / 2 - k[2];
+        if (k === CAM[0]) {
+          gsap.set(world, { x: tx, y: ty });
+          return;
+        }
+        /* geser pas di jeda: berangkat saat jeda mulai, tiba saat kalimat mulai */
+        tl.to(world, { x: tx, y: ty, duration: lead, ease: "power2.inOut" },
+              Math.max(0, t - lead));
+      });
+
+      tl.fromTo("#opening", { opacity: 0, scale: 0.96 },
+                { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0.2);
+      tl.to("#opening", { opacity: 0, duration: 0.5, ease: "power1.in" }, LEAD + 0.25);
+
+      var CAPS = [
+  ["c0", 3.067, 7.717],
+  ["c1", 7.717, 10.905],
+  ["c2", 10.905, 12.252],
+  ["c3", 12.252, 13.39],
+  ["c4", 13.39, 16.543],
+  ["c5", 16.543, 19.506],
+  ["c6", 19.506, 22.781],
+  ["c7", 22.781, 26.86]
+      ];
+      CAPS.forEach(function (c) {
+        var el = document.getElementById(c[0]);
+        if (!el) return;
+        tl.to(el, { opacity: 1, duration: 0.32, ease: "power1.out" }, c[1] + 0.05);
+        tl.to(el, { opacity: 0, duration: 0.26, ease: "power1.in" }, c[2] - 0.26);
+      });
+
+      tl.fromTo("#bar", { scaleX: 0 },
+                { scaleX: 1, duration: 27.16, ease: "none", transformOrigin: "0px 50%" }, 0);
+
+      window.__timelines["bab1"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

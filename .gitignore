@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.hyperframes/
+*.bak
+node_modules/
+_smoke/
+tts-samples/
+test-output.wav
+test-script.wav
+.DS_Store

@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="../assets/audio/../gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #082a4e; }
+      .clip { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden;
+              font-family: "DejaVu Sans Mono", "Liberation Mono", monospace; }
+      #stage { position: absolute; inset: 0; background: #082a4e; overflow: hidden; }
+
+      #world {
+        position: absolute; top: 0; left: 0; width: 7200px; height: 4060px;
+        will-change: transform;
+        background-color: #0b2f56;
+        background-image:
+          linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px),
+          linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+        background-size: 30px 30px, 30px 30px, 150px 150px, 150px 150px;
+      }
+      #sheet { position: absolute; top: 0; left: 0; color: #a9d8ff; }
+
+      .meta { position: absolute; color: #cfe9ff; text-transform: uppercase; }
+      .tlblk { top: 44px; left: 40px; }
+      .bab { font-size: 32px; font-weight: 700; letter-spacing: 6px; color: #7ef0ff; }
+      .ttl { font-size: 20px; letter-spacing: 6px; margin-top: 8px; opacity: .9; }
+      .trblk { top: 52px; right: 40px; text-align: right; font-size: 18px;
+               letter-spacing: 4px; opacity: .7; line-height: 1.7; }
+
+      #opening { position: absolute; inset: 0; display: flex; flex-direction: column;
+                 align-items: center; justify-content: center; opacity: 0; }
+      #opening .t1 { font-size: 104px; font-weight: 700; letter-spacing: 12px;
+                     color: #eaf6ff; text-align: center; line-height: 1.05;
+                     text-shadow: 0 6px 34px rgba(0,0,0,.95); }
+      #opening .t2 { margin-top: 22px; font-size: 30px; letter-spacing: 9px;
+                     color: #7ef0ff; text-align: center; }
+      /* kartu hook: pertanyaan besar, bab + judul jadi subjudul */
+      #opening.hook .t1 { font-size: 44px; letter-spacing: 2.5px; line-height: 1.32;
+                          max-width: 980px; }
+      #opening.hook .t2 { font-size: 24px; letter-spacing: 7px; margin-top: 26px; }
+
+      #caps > div {
+        position: absolute; left: 0; right: 0; bottom: 26px; top: auto; height: auto;
+        width: 1080px;
+        padding: 14px 60px; text-align: center;
+        font-size: 34px; letter-spacing: 2px; color: #eaf6ff;
+        text-transform: uppercase; line-height: 1.36;
+        text-shadow: 0 3px 16px rgba(0,0,0,.98), 0 0 22px rgba(0,0,0,.9);
+      }
+
+      /* PENTING: #barwrap ikut class="clip" sehingga ikut inset:0 (top:0). */
+      #barwrap { position: absolute; left: 0; right: auto; top: auto; bottom: 0;
+                 width: 1080px; height: 10px;
+                 background: rgba(255,255,255,.13); }
+      #bar { position: absolute; left: 0; top: 0; width: 1080px; height: 10px;
+             background: linear-gradient(90deg, #7ef0ff, #eaf6ff); transform-origin: 0 50%; }
+      #vig { position: absolute; inset: 0; pointer-events: none;
+             background: radial-gradient(ellipse at center, rgba(0,0,0,0) 56%, rgba(0,0,0,.38) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="bab4" data-start="0" data-duration="44.904"
+         data-width="1080" data-height="1920">
+
+      <div id="stage" class="clip" data-start="0" data-duration="44.904" data-track-index="0">
+        <div id="world">
+          <svg id="sheet" width="7200" height="4060" viewBox="0 0 7200 4060"
+               xmlns="http://www.w3.org/2000/svg">
+            <defs>
+  <marker id="arc" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,1 L11,6 L0,11 z" fill="#7ef0ff"/>
+  </marker>
+</defs>
+        <rect id="v1Frame" class="d" x="1180" y="1400" width="840" height="1200" fill="none" stroke="#a9d8ff" stroke-width="5" opacity=".5"/>
+        <text id="v1No" class="t" x="1202" y="1452" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="700" font-family='DejaVu Sans Mono', monospace">01</text>
+        <text id="v1Title" class="t" x="1600" y="1495" fill="#eaf6ff" font-size="48" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">DI DALAM BATUAN</text>
+        <line id="v1Surface" class="d" x1="1200" y1="1640" x2="2000" y2="1640" stroke="#e6f4ff" stroke-width="10"/>
+        <path id="v1Grass" class="d" d="M1280,1640 l0,-22 M1360,1640 l0,-22 M1440,1640 l0,-22 M1780,1640 l0,-22 M1860,1640 l0,-22" fill="none" stroke="#a9d8ff" stroke-width="5"/>
+        <text id="v1SurfL" class="t" x="1920" y="1622" fill="#cfe9ff" font-size="22" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">PERMUKAAN</text>
+        <path id="v1DepthA" class="d" d="M1250,1680 V1980 M1238,1700 l12,-20 l12,20 M1238,1960 l12,20 l12,-20" fill="none" stroke="#7ef0ff" stroke-width="8"/>
+        <text id="v1DepthL1" class="t" x="1270" y="1790" fill="#cfe9ff" font-size="24" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">RATUSAN HINGGA</text>
+        <text id="v1DepthL2" class="t" x="1270" y="1826" fill="#cfe9ff" font-size="24" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">RIBUAN METER</text>
+        <rect id="v1Rock" class="d" x="1340" y="1880" width="330" height="330" rx="34"
+              fill="none" stroke="#e6f4ff" stroke-width="12"/>
+        <g id="v1Pores">
+          <circle class="d" cx="1410" cy="1950" r="26" fill="none" stroke="#a9d8ff" stroke-width="6"/>
+          <circle class="d" cx="1510" cy="1935" r="22" fill="none" stroke="#a9d8ff" stroke-width="6"/>
+          <circle class="d" cx="1460" cy="2050" r="24" fill="none" stroke="#a9d8ff" stroke-width="6"/>
+          <circle class="d" cx="1570" cy="2035" r="26" fill="none" stroke="#a9d8ff" stroke-width="6"/>
+          <circle class="d" cx="1425" cy="2145" r="22" fill="none" stroke="#a9d8ff" stroke-width="6"/>
+          <circle class="d" cx="1530" cy="2140" r="24" fill="none" stroke="#a9d8ff" stroke-width="6"/>
+        </g>
+        <g id="v1Drops">
+          <path class="d" d="M1410,1938 c-11.04,14.879999999999999 -15.84,23.04 -15.84,31.2 a15.84,15.84 0 0 0 31.68,0 c0,-8.16 -4.8,-16.32 -15.84,-31.2 z" fill="none" stroke="#7ef0ff" stroke-width="5"/>
+          <path class="d" d="M1460,2038 c-10.12,13.64 -14.52,21.12 -14.52,28.6 a14.52,14.52 0 0 0 29.04,0 c0,-7.48 -4.4,-14.96 -14.52,-28.6 z" fill="none" stroke="#7ef0ff" stroke-width="5"/>
+          <path class="d" d="M1570,2022 c-11.04,14.879999999999999 -15.84,23.04 -15.84,31.2 a15.84,15.84 0 0 0 31.68,0 c0,-8.16 -4.8,-16.32 -15.84,-31.2 z" fill="none" stroke="#7ef0ff" stroke-width="5"/>
+          <path class="d" d="M1530,2126 c-10.12,13.64 -14.52,21.12 -14.52,28.6 a14.52,14.52 0 0 0 29.04,0 c0,-7.48 -4.4,-14.96 -14.52,-28.6 z" fill="none" stroke="#7ef0ff" stroke-width="5"/>
+        </g>
+        <text id="v1RockL" class="t" x="1505" y="2258" fill="#eaf6ff" font-size="26" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">PORI-PORI BATUAN</text>
+        <rect id="v1Sponge" class="d" x="1720" y="1920" width="210" height="170" rx="20"
+              fill="none" stroke="#e6f4ff" stroke-width="10"/>
+        <g id="v1SpongeHoles">
+          <circle class="d" cx="1770" cy="1965" r="17" fill="none" stroke="#a9d8ff" stroke-width="5"/>
+          <circle class="d" cx="1830" cy="1995" r="14" fill="none" stroke="#a9d8ff" stroke-width="5"/>
+          <circle class="d" cx="1882" cy="1960" r="12" fill="none" stroke="#a9d8ff" stroke-width="5"/>
+          <circle class="d" cx="1785" cy="2045" r="13" fill="none" stroke="#a9d8ff" stroke-width="5"/>
+          <circle class="d" cx="1862" cy="2048" r="16" fill="none" stroke="#a9d8ff" stroke-width="5"/>
+        </g>
+        <path id="v1SpongeDrip" class="d" d="M1825,2115 c-19.32,26.04 -27.72,40.32 -27.72,54.6 a27.72,27.72 0 0 0 55.44,0 c0,-14.28 -8.4,-28.56 -27.72,-54.6 z" fill="none" stroke="#7ef0ff" stroke-width="7"/>
+        <text id="v1SpongeL" class="t" x="1825" y="2200" fill="#cfe9ff" font-size="26" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">SEPERTI SPONS</text>
+        <text id="v1TrappedL" class="t" x="1600" y="2300" fill="#7ef0ff" font-size="26" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">AIR + MINYAK TERPERANGKAP</text>
+        <line id="v1Ground" class="d" x1="1200" y1="2330" x2="2000" y2="2330" stroke="#e6f4ff" stroke-width="12"/>
+        <path id="v1Hatch" class="d" d="M1200,2330 l40,40M1278,2330 l40,40M1356,2330 l40,40M1434,2330 l40,40M1512,2330 l40,40M1590,2330 l40,40M1668,2330 l40,40M1746,2330 l40,40M1824,2330 l40,40M1902,2330 l40,40M1980,2330 l40,40" fill="none" stroke="#a9d8ff" stroke-width="4"/>
+        <rect id="v2Frame" class="d" x="2780" y="1400" width="840" height="1200" fill="none" stroke="#a9d8ff" stroke-width="5" opacity=".5"/>
+        <text id="v2No" class="t" x="2802" y="1452" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="700" font-family='DejaVu Sans Mono', monospace">02</text>
+        <text id="v2Title" class="t" x="3200" y="1495" fill="#eaf6ff" font-size="38" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">MENGEBOR & MENGANGKUT</text>
+        <path id="v2Derrick" class="d" d="M2930,1980 L3040,1660 L3150,1980 M2930,1980 H3150 M3040.0,1980.0 L3067.5,1900.0 M3040.0,1980.0 L3012.5,1900.0 M3012.5,1900.0 L3095.0,1820.0 M3067.5,1900.0 L2985.0,1820.0 M2985.0,1820.0 L3122.5,1740.0 M3095.0,1820.0 L2957.5,1740.0 M2957.5,1740.0 L3150.0,1660.0 M3122.5,1740.0 L2930.0,1660.0" fill="none" stroke="#e6f4ff" stroke-width="10"/>
+        <text id="v2DerrickL" class="t" x="3040" y="1628" fill="#cfe9ff" font-size="24" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">MENARA BOR</text>
+        <g id="v2Strata">
+          <path class="d" d="M2800,2060 H3600" fill="none" stroke="#a9d8ff" stroke-width="9"/>
+          <path class="d" d="M2800,2130 H3600" fill="none" stroke="#a9d8ff" stroke-width="9"/>
+        </g>
+        <path id="v2Pipe" class="d" d="M3040,1980 V2200" fill="none" stroke="#e6f4ff" stroke-width="13"/>
+        <text id="v2PipeL" class="t" x="3060" y="2035" fill="#cfe9ff" font-size="22" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">BATUAN DITEMBUS</text>
+        <rect id="v2Tank" class="d" x="3340" y="1900" width="180" height="140" rx="14"
+              fill="none" stroke="#e6f4ff" stroke-width="11"/>
+        <path id="v2TankPipe" class="d" d="M3040,1940 H3340" fill="none" stroke="#7ef0ff" stroke-width="10"/>
+        <text id="v2TankL" class="t" x="3430" y="2075" fill="#cfe9ff" font-size="22" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">KE PERMUKAAN</text>
+        <path id="v2Flow1" class="f" d="M2970,2170 V2010" fill="none" stroke="#7ef0ff" stroke-width="12" marker-end="url(#arc)"/>
+        <path id="v2Flow2" class="f" d="M3110,2170 V2010" fill="none" stroke="#7ef0ff" stroke-width="12" marker-end="url(#arc)"/>
+        <text id="v2PumpL" class="t" x="3040" y="2215" fill="#7ef0ff" font-size="26" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">DIPOMPA NAIK</text>
+        <g id="v2Pressure">
+          <path class="d" d="M3350,2330 c-22,-52 22,-78 0,-130" fill="none" stroke="#7ef0ff" stroke-width="8"/>
+          <path class="d" d="M3460,2330 c-22,-52 22,-78 0,-130" fill="none" stroke="#7ef0ff" stroke-width="8"/>
+        </g>
+        <text id="v2PressL" class="t" x="3405" y="2380" fill="#cfe9ff" font-size="22" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">TEKANAN DARI DALAM BUMI</text>
+        <line id="v2Ground" class="d" x1="2800" y1="2330" x2="3340" y2="2330" stroke="#e6f4ff" stroke-width="12"/>
+        <path id="v2Hatch" class="d" d="M2800,2330 l40,40M2878,2330 l40,40M2956,2330 l40,40M3034,2330 l40,40M3112,2330 l40,40M3190,2330 l40,40M3268,2330 l40,40" fill="none" stroke="#a9d8ff" stroke-width="4"/>
+        <rect id="v3Frame" class="d" x="4380" y="1400" width="840" height="1200" fill="none" stroke="#a9d8ff" stroke-width="5" opacity=".5"/>
+        <text id="v3No" class="t" x="4402" y="1452" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="700" font-family='DejaVu Sans Mono', monospace">03</text>
+        <text id="v3Title" class="t" x="4800" y="1495" fill="#eaf6ff" font-size="44" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">MEREMBES SENDIRI</text>
+        <line id="v3Ground" class="d" x1="4400" y1="1980" x2="5200" y2="1980" stroke="#e6f4ff" stroke-width="12"/>
+        <path id="v3Hatch" class="d" d="M4400,1980 l40,40M4478,1980 l40,40M4556,1980 l40,40M4634,1980 l40,40M4712,1980 l40,40M4790,1980 l40,40M4868,1980 l40,40M4946,1980 l40,40M5024,1980 l40,40M5102,1980 l40,40M5180,1980 l40,40" fill="none" stroke="#a9d8ff" stroke-width="4"/>
+        <path id="v3Crack" class="d" d="M4540,2200 l30,-60 l-14,-52 l34,-58 l18,-50" fill="none" stroke="#a9d8ff" stroke-width="8"/>
+        <path id="v3Seep" class="f" d="M4590,1960 V1890" fill="none" stroke="#7ef0ff" stroke-width="12" marker-end="url(#arc)"/>
+        <ellipse id="v3Puddle" class="d" cx="4590" cy="1958" rx="86" ry="17"
+                 fill="none" stroke="#7ef0ff" stroke-width="8"/>
+        <text id="v3SmallL" class="t" x="4590" y="1856" fill="#cfe9ff" font-size="24" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">SEDIKIT SEKALI</text>
+        <ellipse id="v3WellRim" class="d" cx="4970" cy="1955" rx="88" ry="26"
+                 fill="none" stroke="#e6f4ff" stroke-width="10"/>
+        <g id="v3Posts">
+          <line class="d" x1="4895" y1="1950" x2="4895" y2="1780" stroke="#e6f4ff" stroke-width="9"/>
+          <line class="d" x1="5045" y1="1950" x2="5045" y2="1780" stroke="#e6f4ff" stroke-width="9"/>
+          <line class="d" x1="4880" y1="1780" x2="5060" y2="1780" stroke="#e6f4ff" stroke-width="9"/>
+        </g>
+        <path id="v3Rope" class="d" d="M4970,1785 V1865" fill="none" stroke="#a9d8ff" stroke-width="6"/>
+        <path id="v3Bucket" class="d" d="M4938,1865 h64 l-10,64 h-44 z" fill="none" stroke="#e6f4ff" stroke-width="8"/>
+        <text id="v3WellL" class="t" x="4970" y="2070" fill="#eaf6ff" font-size="24" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">SUMUR TRADISIONAL</text>
+        <text id="v3HeritageL1" class="t" x="4970" y="2112" fill="#cfe9ff" font-size="22" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">DIWARISKAN</text>
+        <text id="v3HeritageL2" class="t" x="4970" y="2144" fill="#cfe9ff" font-size="22" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">TURUN-TEMURUN</text>
+        <path id="v3ArrowL" class="f" d="M4680,1900 H4855" fill="none" stroke="#a9d8ff" stroke-width="8" marker-end="url(#arc)"/>
+        <text id="v3DeepL" class="t" x="4540" y="2260" fill="#cfe9ff" font-size="22" letter-spacing="3" text-anchor="start" font-weight="normal" font-family='DejaVu Sans Mono', monospace">REMBESAN ALAMI DARI BAWAH TANAH</text>
+        <rect id="v4Frame" class="d" x="5980" y="1400" width="840" height="1200" fill="none" stroke="#a9d8ff" stroke-width="5" opacity=".5"/>
+        <text id="v4No" class="t" x="6002" y="1452" fill="#7ef0ff" font-size="30" letter-spacing="3" text-anchor="start" font-weight="700" font-family='DejaVu Sans Mono', monospace">04</text>
+        <text id="v4Title" class="t" x="6400" y="1495" fill="#eaf6ff" font-size="52" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">SKALA DUNIA</text>
+        <path id="v4Derrick" class="d" d="M5950,1960 L6080,1620 L6210,1960 M5950,1960 H6210 M6080.0,1960.0 L6112.5,1875.0 M6080.0,1960.0 L6047.5,1875.0 M6047.5,1875.0 L6145.0,1790.0 M6112.5,1875.0 L6015.0,1790.0 M6015.0,1790.0 L6177.5,1705.0 M6145.0,1790.0 L5982.5,1705.0 M5982.5,1705.0 L6210.0,1620.0 M6177.5,1705.0 L5950.0,1620.0" fill="none" stroke="#e6f4ff" stroke-width="11"/>
+        <text id="v4DerrickL" class="t" x="6080" y="1588" fill="#7ef0ff" font-size="24" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">BOR RAKSASA</text>
+        <path id="v4Wellhead" class="d" d="M6050,1960 h60 v-40 h-20 v-24 h-20 v24 h-20 z" fill="none" stroke="#e6f4ff" stroke-width="8"/>
+        <path id="v4Pipe" class="d" d="M6080,2120 H6780" fill="none" stroke="#e6f4ff" stroke-width="14"/>
+        <g id="v4Joints">
+          <path class="d" d="M6220,2100 v40 M6440,2100 v40 M6660,2100 v40" fill="none" stroke="#a9d8ff" stroke-width="7"/>
+        </g>
+        <g id="v4SmallWells">
+          <path class="d" d="M6220,2120 v-80 l26,-46 l26,46 v80" fill="none" stroke="#a9d8ff" stroke-width="8"/>
+          <path class="d" d="M6440,2120 v-80 l26,-46 l26,46 v80" fill="none" stroke="#a9d8ff" stroke-width="8"/>
+          <path class="d" d="M6660,2120 v-80 l26,-46 l26,46 v80" fill="none" stroke="#a9d8ff" stroke-width="8"/>
+        </g>
+        <text id="v4NetL" class="t" x="6440" y="1980" fill="#cfe9ff" font-size="24" letter-spacing="3" text-anchor="middle" font-weight="normal" font-family='DejaVu Sans Mono', monospace">BANYAK SUMUR TERHUBUNG</text>
+        <path id="v4ArrowRight" class="f" d="M6780,2120 H6800" fill="none" stroke="#7ef0ff" stroke-width="14" marker-end="url(#arc)"/>
+        <text id="v4SpanL1" class="t" x="6400" y="2230" fill="#7ef0ff" font-size="28" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">JARINGAN PIPA</text>
+        <text id="v4SpanL2" class="t" x="6400" y="2272" fill="#7ef0ff" font-size="28" letter-spacing="3" text-anchor="middle" font-weight="700" font-family='DejaVu Sans Mono', monospace">SEPANJANG BENUA</text>
+        <line id="v4Ground" class="d" x1="6000" y1="2350" x2="6800" y2="2350" stroke="#e6f4ff" stroke-width="12"/>
+        <path id="v4Hatch" class="d" d="M6000,2350 l40,40M6078,2350 l40,40M6156,2350 l40,40M6234,2350 l40,40M6312,2350 l40,40M6390,2350 l40,40M6468,2350 l40,40M6546,2350 l40,40M6624,2350 l40,40M6702,2350 l40,40M6780,2350 l40,40" fill="none" stroke="#a9d8ff" stroke-width="4"/>
+        <path id="conn1" class="d" d="M2070,2300 H2730" fill="none" stroke="#7ef0ff" stroke-width="9" marker-end="url(#arc)"/>
+        <path id="conn2" class="d" d="M3670,2300 H4330" fill="none" stroke="#7ef0ff" stroke-width="9" marker-end="url(#arc)"/>
+        <path id="conn3" class="d" d="M5270,2300 H5930" fill="none" stroke="#7ef0ff" stroke-width="9" marker-end="url(#arc)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div id="hud" class="clip" data-start="0" data-duration="44.904" data-track-index="1">
+        <div class="meta tlblk">
+          <div class="bab">BAB 04</div>
+          <div class="ttl">KELUAR DARI BUMI</div>
+        </div>
+        <div class="meta trblk">SETETES BENSIN<br>LIVE-DRAW · 9:16</div>
+        <div id="opening" class="hook">
+          <div class="t1">Di mana bumi menyimpan bensin, dan bagaimana kita mengeluarkannya?</div>
+          <div class="t2">BAB 04 · KELUAR DARI BUMI</div>
+        </div>
+      </div>
+
+      <div id="caps" class="clip" data-start="0" data-duration="44.904" data-track-index="2">
+        <div id="c0" class="clip" data-start="1.869" data-duration="3.20">MINYAK BUMI TERPERANGKAP DI PORI-PORI BATUAN</div>
+        <div id="c1" class="clip" data-start="5.07" data-duration="3.39">RATUSAN HINGGA RIBUAN METER DI BAWAH KITA</div>
+        <div id="c2" class="clip" data-start="8.458" data-duration="1.34">SEPERTI AIR DI DALAM SPONS</div>
+        <div id="c3" class="clip" data-start="9.794" data-duration="5.46">UNTUK MENGELUARKANNYA MANUSIA MENGEBOR</div>
+        <div id="c4" class="clip" data-start="15.259" data-duration="5.09">BATUAN DITEMBUS — MINYAK DIPOMPA NAIK KE PERMUKAAN</div>
+        <div id="c5" class="clip" data-start="20.344" data-duration="2.85">DIDORONG TEKANAN DARI DALAM BUMI</div>
+        <div id="c6" class="clip" data-start="23.197" data-duration="4.17">DI BEBERAPA TEMPAT,</div>
+        <div id="c7" class="clip" data-start="27.363" data-duration="3.04">MINYAK BAHKAN MEREMBES SENDIRI KE PERMUKAAN</div>
+        <div id="c8" class="clip" data-start="30.403" data-duration="5.93">SEPERTI SUMUR TRADISIONAL YANG DIWARISKAN TURUN-TEMURUN</div>
+        <div id="c9" class="clip" data-start="36.331" data-duration="1.37">NAMUN JUMLAHNYA KECIL</div>
+        <div id="c10" class="clip" data-start="37.704" data-duration="4.49">YANG MEMENUHI KEBUTUHAN DUNIA ADALAH SUMUR BOR RAKSASA</div>
+        <div id="c11" class="clip" data-start="42.195" data-duration="2.41">DAN JARINGAN PIPA SEPANJANG BENUA</div>
+      </div>
+
+      <div id="barwrap" class="clip" data-start="0" data-duration="44.904" data-track-index="3">
+        <div id="bar"></div>
+      </div>
+      <div id="vig"></div>
+
+      <audio id="sfx" src="../assets/audio/sfx-bab4.mp3"
+             data-start="0" data-duration="44.904" data-track-index="8" data-volume="1"></audio>
+      <audio id="vo" src="../assets/vo/bab4-keluar-dari-bumi-r.mp3"
+             data-start="0" data-duration="44.904" data-track-index="9" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const VW = 1080, VH = 1920;
+      const world = document.getElementById("world");
+
+      /* live-draw: garis disembunyikan lewat dash */
+      document.querySelectorAll(".d").forEach(function (el) {
+        var L = 0;
+        try { L = el.getTotalLength(); } catch (e) { L = 0; }
+        if (!L || !isFinite(L)) { var b = el.getBBox(); L = 2 * (b.width + b.height) + 24; }
+        el.style.strokeDasharray = L + " " + L;
+        el.style.strokeDashoffset = L;
+      });
+      document.querySelectorAll(".t, .f, #caps > div").forEach(function (el) {
+        el.style.opacity = 0;
+      });
+
+      const WORDS = [{t:2.019}, {t:2.379}, {t:2.739}, {t:3.46}, {t:3.64}, {t:4.36}, {t:5.22}, {t:5.878}, {t:6.317}, {t:6.755}, {t:7.193}, {t:7.413}, {t:8.275}, {t:8.608}, {t:9.109}, {t:9.276}, {t:9.443}, {t:9.777}, {t:9.944}, {t:10.822}, {t:14.494}, {t:14.952}, {t:15.409}, {t:16.289}, {t:16.997}, {t:17.922}, {t:18.29}, {t:18.841}, {t:19.024}, {t:19.575}, {t:19.759}, {t:19.943}, {t:20.494}, {t:21.523}, {t:22.131}, {t:22.537}, {t:22.942}, {t:23.347}, {t:24.124}, {t:24.882}, {t:27.513}, {t:27.884}, {t:28.256}, {t:28.813}, {t:29.371}, {t:29.556}, {t:30.553}, {t:31.118}, {t:31.494}, {t:32.248}, {t:32.436}, {t:33.19}, {t:36.481}, {t:36.873}, {t:37.461}, {t:37.854}, {t:38.624}, {t:39.407}, {t:40.191}, {t:40.582}, {t:41.17}, {t:41.562}, {t:41.758}, {t:42.345}, {t:42.541}, {t:43.129}, {t:43.521}, {t:44.108}];
+      const JEDA = {20: 1.8, 40: 1.8, 52: 1.8};
+      const LEAD = 1.8;
+      const CUES = [
+  [0, "#v1Frame", 1.0, "d"],
+  [0, "#v1No", 0.6, "t"],
+  [0, "#v1Title", 0.8, "t"],
+  [2, "#v1Surface", 1.0, "d"],
+  [2, "#v1Grass", 0.6, "d"],
+  [2, "#v1SurfL", 0.5, "t"],
+  [4, "#v1DepthA", 0.9, "d"],
+  [4, "#v1DepthL1", 0.5, "t"],
+  [4, "#v1DepthL2", 0.5, "t"],
+  [7, "#v1Rock", 1.2, "d"],
+  [9, "#v1Pores .d", 1.1, "d"],
+  [11, "#v1Drops .d", 1.0, "d"],
+  [11, "#v1RockL", 0.5, "t"],
+  [13, "#v1Sponge", 0.9, "d"],
+  [15, "#v1SpongeHoles .d", 0.8, "d"],
+  [15, "#v1SpongeDrip", 0.5, "d"],
+  [15, "#v1SpongeL", 0.5, "t"],
+  [17, "#v1Ground", 0.9, "d"],
+  [17, "#v1Hatch", 1.0, "d"],
+  [18, "#v1TrappedL", 0.6, "t"],
+  [19, "#conn1", 1.0, "d"],
+  [20, "#v2Title", 0.8, "t"],
+  [22, "#v2Derrick", 1.3, "d"],
+  [22, "#v2DerrickL", 0.5, "t"],
+  [24, "#v2Ground", 0.9, "d"],
+  [24, "#v2Hatch", 1.0, "d"],
+  [25, "#v2Strata .d", 0.9, "d"],
+  [27, "#v2Pipe", 0.8, "d"],
+  [27, "#v2PipeL", 0.5, "t"],
+  [29, "#v2Tank", 0.8, "d"],
+  [29, "#v2TankPipe", 0.6, "d"],
+  [29, "#v2TankL", 0.5, "t"],
+  [31, "#v2Flow1", 0.5, "f"],
+  [31, "#v2Flow2", 0.5, "f"],
+  [31, "#v2PumpL", 0.5, "t"],
+  [33, "#v2Pressure .d", 1.0, "d"],
+  [33, "#v2PressL", 0.5, "t"],
+  [36, "#conn2", 1.0, "d"],
+  [40, "#v3Title", 0.7, "t"],
+  [41, "#v3Crack", 0.9, "d"],
+  [42, "#v3Seep", 0.5, "f"],
+  [42, "#v3Puddle", 0.6, "d"],
+  [42, "#v3SmallL", 0.5, "t"],
+  [44, "#v3ArrowL", 0.5, "f"],
+  [45, "#v3WellRim", 0.7, "d"],
+  [46, "#v3Posts .d", 0.7, "d"],
+  [47, "#v3Rope", 0.4, "d"],
+  [47, "#v3Bucket", 0.6, "d"],
+  [48, "#v3WellL", 0.5, "t"],
+  [49, "#v3HeritageL1", 0.4, "t"],
+  [49, "#v3HeritageL2", 0.4, "t"],
+  [50, "#v3DeepL", 0.5, "t"],
+  [51, "#conn3", 0.8, "d"],
+  [52, "#v4Title", 0.7, "t"],
+  [53, "#v4Ground", 0.9, "d"],
+  [53, "#v4Hatch", 1.0, "d"],
+  [54, "#v4Derrick", 1.3, "d"],
+  [54, "#v4DerrickL", 0.5, "t"],
+  [56, "#v4Wellhead", 0.6, "d"],
+  [58, "#v4Pipe", 1.2, "d"],
+  [60, "#v4Joints .d", 0.6, "d"],
+  [61, "#v4SmallWells .d", 1.0, "d"],
+  [61, "#v4NetL", 0.5, "t"],
+  [63, "#v4ArrowRight", 0.4, "f"],
+  [64, "#v4SpanL1", 0.5, "t"],
+  [64, "#v4SpanL2", 0.5, "t"]
+      ];
+      CUES.forEach(function (c) {
+        var t = WORDS[c[0]].t, sel = c[1], dur = c[2], kind = c[3];
+        if (kind === "t") {
+          tl.to(sel, { opacity: 1, duration: dur, ease: "power1.out" }, t);
+        } else {
+          tl.to(sel, { strokeDashoffset: 0, duration: dur, ease: "power1.inOut" }, t);
+        }
+      });
+
+      /* pra-gambar: digambar di dalam jeda, sebelum kalimat berikutnya mulai */
+      const PRESHOW = [
+  [20, 0.15, "#v2Frame", 0.55, "d"],
+  [20, 0.4, "#v2No", 0.4, "t"],
+  [40, 0.15, "#v3Frame", 0.55, "d"],
+  [40, 0.4, "#v3No", 0.4, "t"],
+  [52, 0.15, "#v4Frame", 0.55, "d"],
+  [52, 0.4, "#v4No", 0.4, "t"]
+      ];
+      PRESHOW.forEach(function (c) {
+        var t = WORDS[c[0]].t - JEDA[c[0]] + c[1], sel = c[2], dur = c[3], kind = c[4];
+        if (kind === "t") {
+          tl.to(sel, { opacity: 1, duration: dur, ease: "power1.out" }, t);
+        } else {
+          tl.to(sel, { strokeDashoffset: 0, duration: dur, ease: "power1.inOut" }, t);
+        }
+      });
+
+      /* ---- kamera: diam saat menggambar, geser pelan ke gambar berikutnya ---- */
+      const CAM = [
+  [0, 1600, 2000, 0.0],
+  [20, 3200, 2000, 1.8],
+  [40, 4800, 2000, 1.8],
+  [52, 6400, 2000, 1.8]
+      ];
+      CAM.forEach(function (k) {
+        var w = k[0], t = WORDS[w].t, lead = k[3];
+        var tx = VW / 2 - k[1], ty = VH / 2 - k[2];
+        if (k === CAM[0]) {
+          gsap.set(world, { x: tx, y: ty });
+          return;
+        }
+        /* geser pas di jeda: berangkat saat jeda mulai, tiba saat kalimat mulai */
+        tl.to(world, { x: tx, y: ty, duration: lead, ease: "power2.inOut" },
+              Math.max(0, t - lead));
+      });
+
+      tl.fromTo("#opening", { opacity: 0, scale: 0.96 },
+                { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0.2);
+      tl.to("#opening", { opacity: 0, duration: 0.5, ease: "power1.in" }, LEAD + 0.25);
+
+      var CAPS = [
+  ["c0", 1.869, 5.07],
+  ["c1", 5.07, 8.458],
+  ["c2", 8.458, 9.794],
+  ["c3", 9.794, 15.259],
+  ["c4", 15.259, 20.344],
+  ["c5", 20.344, 23.197],
+  ["c6", 23.197, 27.363],
+  ["c7", 27.363, 30.403],
+  ["c8", 30.403, 36.331],
+  ["c9", 36.331, 37.704],
+  ["c10", 37.704, 42.195],
+  ["c11", 42.195, 44.604]
+      ];
+      CAPS.forEach(function (c) {
+        var el = document.getElementById(c[0]);
+        if (!el) return;
+        tl.to(el, { opacity: 1, duration: 0.32, ease: "power1.out" }, c[1] + 0.05);
+        tl.to(el, { opacity: 0, duration: 0.26, ease: "power1.in" }, c[2] - 0.26);
+      });
+
+      tl.fromTo("#bar", { scaleX: 0 },
+                { scaleX: 1, duration: 44.904, ease: "none", transformOrigin: "0px 50%" }, 0);
+
+      window.__timelines["bab4"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

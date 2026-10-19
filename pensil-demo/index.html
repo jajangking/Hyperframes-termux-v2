@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #082a4e; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      .host { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    </style>
+  </head>
+  <body>
+    <!-- Dibuat `python3 -m pensil index` — jangan diedit tangan. -->
+    <div id="root" data-composition-id="pensil-demo" data-start="0" data-duration="44.448"
+         data-width="1080" data-height="1920">
+      <div id="bab5thost" class="host" data-composition-id="bab5t"
+           data-composition-src="compositions/bab5t.html"
+           data-start="0.0" data-duration="44.448" data-track-index="0"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["pensil-demo"] = gsap.timeline({ paused: true });
+      window.__timelines["pensil-demo"].seek(0);
+    </script>
+  </body>
+</html>

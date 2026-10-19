@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #082a4e; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      .host { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    </style>
+  </head>
+  <body>
+    <!-- Dibuat `python3 -m pensil index` — jangan diedit tangan. -->
+    <div id="root" data-composition-id="reels" data-start="0" data-duration="210.28"
+         data-width="1080" data-height="1920">
+      <div id="bab1host" class="host" data-composition-id="bab1"
+           data-composition-src="compositions/bab1.html"
+           data-start="0.0" data-duration="27.16" data-track-index="0"></div>
+      <div id="bab2host" class="host" data-composition-id="bab2"
+           data-composition-src="compositions/bab2.html"
+           data-start="27.16" data-duration="41.04" data-track-index="0"></div>
+      <div id="bab3host" class="host" data-composition-id="bab3"
+           data-composition-src="compositions/bab3.html"
+           data-start="68.2" data-duration="52.728" data-track-index="0"></div>
+      <div id="bab4host" class="host" data-composition-id="bab4"
+           data-composition-src="compositions/bab4.html"
+           data-start="120.928" data-duration="44.904" data-track-index="0"></div>
+      <div id="bab5host" class="host" data-composition-id="bab5"
+           data-composition-src="compositions/bab5.html"
+           data-start="165.832" data-duration="44.448" data-track-index="0"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["reels"] = gsap.timeline({ paused: true });
+      window.__timelines["reels"].seek(0);
+    </script>
+  </body>
+</html>

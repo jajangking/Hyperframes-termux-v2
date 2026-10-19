@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="../assets/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #061a30; }
+      .clip { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden;
+              font-family: "DejaVu Sans Mono", "Liberation Mono", monospace; }
+
+      /* ---------- stage & world (the giant blueprint) ---------- */
+      #stage { overflow: hidden; background: #061a30; }
+      #world {
+        position: absolute; top: 0; left: 0;
+        width: 4600px; height: 3100px;
+        transform-origin: 0 0;
+        background-color: #0b2f56;
+        background-image:
+          linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
+          linear-gradient(rgba(255,255,255,.11) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.11) 1px, transparent 1px);
+        background-size: 46px 46px, 46px 46px, 230px 230px, 230px 230px;
+        box-shadow: inset 0 0 600px rgba(0,0,0,.55);
+      }
+      #sheet { position: absolute; top: 0; left: 0; }
+
+      /* ---------- HUD (kaca jendela / skala) ---------- */
+      #hud { pointer-events: none; }
+      .brackets { position: absolute; top: 0; left: 0; }
+      .meta { position: absolute; color: #cfe9ff; text-transform: uppercase; }
+      .tlblk { top: 42px; left: 46px; }
+      .bab { font-size: 42px; font-weight: 700; letter-spacing: 6px; color: #7ef0ff; }
+      .ttl { font-size: 24px; letter-spacing: 8px; margin-top: 8px; opacity: .9; }
+      .trblk { top: 50px; right: 46px; text-align: right; font-size: 20px;
+               letter-spacing: 5px; opacity: .75; line-height: 1.7; }
+      .blblk { bottom: 66px; left: 46px; font-size: 18px; letter-spacing: 4px; opacity: .7; }
+      .brblk { bottom: 66px; right: 46px; font-size: 18px; letter-spacing: 4px;
+               opacity: .7; text-align: right; }
+
+      /* ---------- caption bar ---------- */
+      #c0, #cA, #cB, #cD, #cC {
+        position: absolute; left: 46px; bottom: 120px; width: 1700px;
+        height: auto; inset: auto 46px auto 46px; width: auto;
+        font-size: 30px; letter-spacing: 3px; color: #eaf6ff;
+        text-transform: uppercase; line-height: 1.5;
+        text-shadow: 0 3px 18px rgba(0,0,0,.9);
+      }
+      #c0::before, #cA::before, #cB::before, #cD::before, #cC::before {
+        content: ""; display: inline-block; width: 26px; height: 30px;
+        background: #7ef0ff; margin-right: 22px; vertical-align: -4px;
+      }
+
+      /* ---------- progress ---------- */
+      #barwrap { position: absolute; left: 0; bottom: 0; width: 1920px; height: 8px;
+                 background: rgba(255,255,255,.14); }
+      #bar { position: absolute; left: 0; top: 0; width: 1920px; height: 8px;
+             background: linear-gradient(90deg, #7ef0ff, #4bb9ff);
+             transform-origin: 0 50%; }
+
+      /* ---------- vignette ---------- */
+      #vig { position: absolute; inset: 0; pointer-events: none;
+             background: radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,.55) 100%); }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-j79t" id="root" data-composition-id="bab1" data-start="0" data-duration="18.36"
+         data-width="1920" data-height="1080">
+
+      <div data-hf-id="hf-qkh2" id="stage" class="clip" data-start="0" data-duration="18.36" data-track-index="0">
+        <div data-hf-id="hf-j427" id="world">
+
+          <svg data-hf-id="hf-vtx1" id="sheet" width="4600" height="3100" viewBox="0 0 4600 3100"
+               xmlns="http://www.w3.org/2000/svg">
+            <defs data-hf-id="hf-mh0t">
+              <pattern data-hf-id="hf-6epd" id="h45" width="22" height="22" patternUnits="userSpaceOnUse"
+                       patternTransform="rotate(45)">
+                <line data-hf-id="hf-h0ke" x1="0" y1="0" x2="0" y2="22" stroke="#79b8e8" stroke-width="1.6" opacity=".55"/>
+              </pattern>
+              <pattern data-hf-id="hf-ssey" id="h135" width="22" height="22" patternUnits="userSpaceOnUse"
+                       patternTransform="rotate(-45)">
+                <line data-hf-id="hf-74ea" x1="0" y1="0" x2="0" y2="22" stroke="#79b8e8" stroke-width="1.6" opacity=".55"/>
+              </pattern>
+              <pattern data-hf-id="hf-csme" id="dots" width="30" height="30" patternUnits="userSpaceOnUse">
+                <circle data-hf-id="hf-80qj" cx="8" cy="8" r="3" fill="#79b8e8" opacity=".6"/>
+                <circle data-hf-id="hf-oeb5" cx="22" cy="22" r="2" fill="#79b8e8" opacity=".45"/>
+              </pattern>
+              <marker data-hf-id="hf-groe" id="ar" viewBox="0 0 12 12" refX="10" refY="6"
+                      markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path data-hf-id="hf-cyak" d="M0,1 L11,6 L0,11 z" fill="#cfe9ff"/>
+              </marker>
+              <marker data-hf-id="hf-ffvf" id="arc" viewBox="0 0 12 12" refX="10" refY="6"
+                      markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path data-hf-id="hf-pf6z" d="M0,1 L11,6 L0,11 z" fill="#7ef0ff"/>
+              </marker>
+            </defs>
+
+            <!-- ===== SHEET BORDER + REGISTRATION ===== -->
+            <g data-hf-id="hf-b2zd" stroke="#dff0ff" fill="none">
+              <rect data-hf-id="hf-rftv" x="60" y="60" width="4480" height="2980" stroke-width="8"/>
+              <rect data-hf-id="hf-jzp3" x="92" y="92" width="4416" height="2916" stroke-width="2" opacity=".55"/>
+              <g data-hf-id="hf-zc2i" opacity=".8" stroke-width="3">
+                <circle data-hf-id="hf-fb8j" cx="60" cy="60" r="34"/><path data-hf-id="hf-ysds" d="M60,10 L60,110 M10,60 L110,60"/>
+                <circle data-hf-id="hf-g6lq" cx="4540" cy="60" r="34"/><path data-hf-id="hf-ue62" d="M4540,10 L4540,110 M4490,60 L4590,60"/>
+                <circle data-hf-id="hf-gnw6" cx="60" cy="3040" r="34"/><path data-hf-id="hf-7qvf" d="M60,2990 L60,3090 M10,3040 L110,3040"/>
+                <circle data-hf-id="hf-949f" cx="4540" cy="3040" r="34"/><path data-hf-id="hf-3cf5" d="M4540,2990 L4540,3090 M4490,3040 L4590,3040"/>
+              </g>
+              <!-- dimension lines -->
+              <g data-hf-id="hf-tvzo" stroke-width="3" opacity=".85" marker-start="url(#ar)" marker-end="url(#ar)">
+                <line data-hf-id="hf-32ct" x1="60" y1="34" x2="4540" y2="34"/>
+                <line data-hf-id="hf-gp9l" x1="34" y1="60" x2="34" y2="3040"/>
+              </g>
+            </g>
+            <text data-hf-id="hf-s7ff" x="2300" y="22" fill="#cfe9ff" font-size="34" text-anchor="middle"
+                  letter-spacing="6" font-family="'DejaVu Sans Mono', monospace">4600 PX</text>
+            <text data-hf-id="hf-5ykj" x="22" y="1550" fill="#cfe9ff" font-size="34" text-anchor="middle"
+                  letter-spacing="6" font-family="'DejaVu Sans Mono', monospace"
+                  transform="rotate(-90 22 1550)">3100 PX</text>
+
+            <!-- ===== SPOTLIGHTS (di-animasi GSAP) ===== -->
+            <g data-hf-id="hf-tf4c" id="spotA" opacity="0">
+              <rect data-hf-id="hf-xcta" x="220" y="240" width="2100" height="1060" fill="#7ef0ff" opacity=".07"/>
+              <rect data-hf-id="hf-0jyp" x="208" y="228" width="2124" height="1084" fill="none" stroke="#7ef0ff" stroke-width="9"/>
+            </g>
+            <g data-hf-id="hf-b0y3" id="spotB" opacity="0">
+              <rect data-hf-id="hf-yfe7" x="220" y="1400" width="2100" height="1060" fill="#7ef0ff" opacity=".07"/>
+              <rect data-hf-id="hf-30bv" x="208" y="1388" width="2124" height="1084" fill="none" stroke="#7ef0ff" stroke-width="9"/>
+            </g>
+            <g data-hf-id="hf-jv25" id="spotD" opacity="0">
+              <rect data-hf-id="hf-ms03" x="2420" y="240" width="1960" height="1060" fill="#7ef0ff" opacity=".07"/>
+              <rect data-hf-id="hf-af2e" x="2408" y="228" width="1984" height="1084" fill="none" stroke="#7ef0ff" stroke-width="9"/>
+            </g>
+            <g data-hf-id="hf-aeq6" id="spotC" opacity="0">
+              <rect data-hf-id="hf-uv5k" x="2420" y="1400" width="1960" height="1060" fill="#7ef0ff" opacity=".07"/>
+              <rect data-hf-id="hf-1o9e" x="2408" y="1388" width="1984" height="1084" fill="none" stroke="#7ef0ff" stroke-width="9"/>
+            </g>
+
+            <!-- ===== PANEL A : SPBU ===== -->
+            <g data-hf-id="hf-h0h8" id="panelA">
+              <rect data-hf-id="hf-k147" x="220" y="240" width="2100" height="1060" fill="#0e3a66" opacity=".3"
+                    stroke="#a9d8ff" stroke-width="4"/>
+              <text data-hf-id="hf-atuy" x="252" y="318" fill="#7ef0ff" font-size="58" letter-spacing="5"
+                    font-family="'DejaVu Sans Mono', monospace" font-weight="700">A · SPBU / POM BENSIN</text>
+              <line data-hf-id="hf-pfte" x1="252" y1="342" x2="1080" y2="342" stroke="#7ef0ff" stroke-width="4"/>
+
+              <g data-hf-id="hf-dhjq" fill="none" stroke="#e6f4ff" stroke-width="6" stroke-linejoin="round">
+                <!-- canopy -->
+                <path data-hf-id="hf-4arv" d="M460,566 L2080,566 L2020,668 L520,668 Z" fill="url(#h45)" fill-opacity=".45"/>
+                <line data-hf-id="hf-ol2d" x1="520" y1="668" x2="2020" y2="668"/>
+                <rect data-hf-id="hf-pvvo" x="600" y="668" width="46" height="452" fill="url(#h45)" fill-opacity=".45"/>
+                <rect data-hf-id="hf-ywil" x="1237" y="668" width="46" height="452" fill="url(#h45)" fill-opacity=".45"/>
+                <rect data-hf-id="hf-a6s4" x="1874" y="668" width="46" height="452" fill="url(#h45)" fill-opacity=".45"/>
+                <!-- ground + road -->
+                <line data-hf-id="hf-tcgv" x1="262" y1="1120" x2="2278" y2="1120" stroke-width="8"/>
+                <line data-hf-id="hf-myb4" x1="262" y1="1196" x2="2278" y2="1196" stroke-width="3" stroke-dasharray="60 46" opacity=".7"/>
+                <!-- pumps -->
+                <rect data-hf-id="hf-iteo" x="742" y="800" width="156" height="320" rx="14" fill="#0b2f56"/>
+                <rect data-hf-id="hf-277s" x="762" y="826" width="116" height="70" fill="url(#dots)" stroke-width="3"/>
+                <path data-hf-id="hf-reyf" d="M898,860 q70,10 70,80" stroke-width="5"/>
+                <rect data-hf-id="hf-fdeq" x="1442" y="800" width="156" height="320" rx="14" fill="#0b2f56"/>
+                <rect data-hf-id="hf-ekvy" x="1462" y="826" width="116" height="70" fill="url(#dots)" stroke-width="3"/>
+                <path data-hf-id="hf-990r" d="M1598,860 q70,10 70,80" stroke-width="5"/>
+                <!-- cars -->
+                <g data-hf-id="hf-0u7c" transform="translate(340,1108)">
+                  <path data-hf-id="hf-bzzx" d="M6,0 h300 a26,26 0 0 0 26,-26 v-64 h-74 l-58,-58 h-112 l-58,58 h-24 v64 a26,26 0 0 0 26,26 z"/>
+                  <circle data-hf-id="hf-dmyr" cx="96" cy="6" r="40"/><circle data-hf-id="hf-7l7o" cx="244" cy="6" r="40"/>
+                </g>
+                <g data-hf-id="hf-4nbv" transform="translate(1120,1108)">
+                  <path data-hf-id="hf-124x" d="M6,0 h300 a26,26 0 0 0 26,-26 v-64 h-74 l-58,-58 h-112 l-58,58 h-24 v64 a26,26 0 0 0 26,26 z"/>
+                  <circle data-hf-id="hf-rb43" cx="96" cy="6" r="40"/><circle data-hf-id="hf-10bg" cx="244" cy="6" r="40"/>
+                </g>
+                <!-- queue arrow -->
+                <line data-hf-id="hf-xkf6" x1="270" y1="760" x2="560" y2="760" stroke-width="6"
+                      marker-end="url(#ar)" opacity=".9"/>
+              </g>
+
+              <g data-hf-id="hf-22y7" fill="#cfe9ff" font-size="42" letter-spacing="4"
+                 font-family="'DejaVu Sans Mono', monospace">
+                <text data-hf-id="hf-y76q" x="470" y="524">ATAP CANOPY</text>
+                <text data-hf-id="hf-t2uc" x="722" y="778">NOSSEL 01</text>
+                <text data-hf-id="hf-o3y5" x="1422" y="778">NOSSEL 02</text>
+                <text data-hf-id="hf-qtz2" x="332" y="1290">ANTREAN KENDARAAN</text>
+                <text data-hf-id="hf-zh46" x="1400" y="1290">AREA PENGISIAN</text>
+                <text data-hf-id="hf-wpa8" x="1980" y="760">→ MASUK</text>
+              </g>
+              <text data-hf-id="hf-gr7l" x="2000" y="1262" fill="#7ef0ff" font-size="46" letter-spacing="6"
+                    font-family="'DejaVu Sans Mono', monospace">01 · TEMPAT BERMULA</text>
+            </g>
+
+            <!-- ===== PANEL B : NOZZLE & METER ===== -->
+            <g data-hf-id="hf-rvyv" id="panelB">
+              <rect data-hf-id="hf-yx50" x="220" y="1400" width="2100" height="1060" fill="#0e3a66" opacity=".3"
+                    stroke="#a9d8ff" stroke-width="4"/>
+              <text data-hf-id="hf-tror" x="252" y="1478" fill="#7ef0ff" font-size="58" letter-spacing="5"
+                    font-family="'DejaVu Sans Mono', monospace" font-weight="700">B · NOZZLE &amp; METERAN</text>
+              <line data-hf-id="hf-ap21" x1="252" y1="1502" x2="1180" y2="1502" stroke="#7ef0ff" stroke-width="4"/>
+
+              <g data-hf-id="hf-99tm" fill="none" stroke="#e6f4ff" stroke-width="6" stroke-linejoin="round">
+                <!-- meter -->
+                <rect data-hf-id="hf-vmof" x="380" y="1580" width="660" height="420" rx="12" fill="#0b2f56"/>
+                <text data-hf-id="hf-2y53" x="416" y="1646" fill="#7ef0ff" stroke="none" font-size="40"
+                      font-family="'DejaVu Sans Mono', monospace">METERAN</text>
+                <g data-hf-id="hf-0ul3" fill="#061a30" stroke-width="4">
+                  <rect data-hf-id="hf-a12q" x="416" y="1676" width="112" height="140"/>
+                  <rect data-hf-id="hf-mqcs" x="546" y="1676" width="112" height="140"/>
+                  <rect data-hf-id="hf-iy6u" x="676" y="1676" width="112" height="140"/>
+                  <rect data-hf-id="hf-tfpf" x="806" y="1676" width="112" height="140"/>
+                  <rect data-hf-id="hf-judz" x="936" y="1676" width="112" height="140"/>
+                </g>
+                <text data-hf-id="hf-mcul" x="472" y="1796" fill="#e6f4ff" stroke="none" font-size="112" text-anchor="middle"
+                      font-family="'DejaVu Sans Mono', monospace">0</text>
+                <text data-hf-id="hf-da92" x="602" y="1796" fill="#e6f4ff" stroke="none" font-size="112" text-anchor="middle"
+                      font-family="'DejaVu Sans Mono', monospace">0</text>
+                <text data-hf-id="hf-rmaq" x="732" y="1796" fill="#e6f4ff" stroke="none" font-size="112" text-anchor="middle"
+                      font-family="'DejaVu Sans Mono', monospace">4</text>
+                <text data-hf-id="hf-c9o8" x="862" y="1796" fill="#e6f4ff" stroke="none" font-size="112" text-anchor="middle"
+                      font-family="'DejaVu Sans Mono', monospace">2</text>
+                <text data-hf-id="hf-9fx5" x="992" y="1796" fill="#7ef0ff" stroke="none" font-size="112" text-anchor="middle"
+                      font-family="'DejaVu Sans Mono', monospace">0</text>
+                <text data-hf-id="hf-9ivx" x="416" y="1952" fill="#cfe9ff" stroke="none" font-size="44"
+                      font-family="'DejaVu Sans Mono', monospace">UNIT: LITER (L)</text>
+
+                <!-- hose -->
+                <path data-hf-id="hf-85wu" d="M700,2000 C820,2320 1120,2340 1330,2140" stroke-width="14" opacity=".55"/>
+                <path data-hf-id="hf-f8x8" d="M700,2000 C820,2320 1120,2340 1330,2140" stroke="#061a30" stroke-width="4"/>
+
+                <!-- nozzle -->
+                <g data-hf-id="hf-bg56" transform="translate(1130,1748)">
+                  <path data-hf-id="hf-ugsh" d="M0,40 h300 v130 h-300 a30,30 0 0 1 -30,-30 v-70 a30,30 0 0 1 30,-30 z"
+                        fill="#0b2f56"/>
+                  <rect data-hf-id="hf-ff5o" x="300" y="58" width="212" height="52" rx="14" fill="#0b2f56"/>
+                  <path data-hf-id="hf-muht" d="M40,40 v-70 h110 v70" stroke-width="5"/>
+                  <path data-hf-id="hf-d1un" d="M60,170 q40,90 130,70" stroke-width="5"/>
+                </g>
+
+                <!-- tank -->
+                <rect data-hf-id="hf-mz7v" x="1640" y="1680" width="620" height="600" rx="44" fill="#0b2f56"/>
+                <path data-hf-id="hf-4pr3" d="M1656,1960 h588 v300 a44,44 0 0 1 -44,44 h-500 a44,44 0 0 1 -44,-44 z"
+                      fill="url(#h45)" fill-opacity=".7"/>
+                <rect data-hf-id="hf-yj8t" x="1856" y="1642" width="180" height="46" rx="8"/>
+                <!-- flow arrows -->
+                <g data-hf-id="hf-3hit" stroke="#7ef0ff" stroke-width="6">
+                  <line data-hf-id="hf-gpgb" x1="760" y1="2160" x2="1040" y2="2244" marker-end="url(#arc)"/>
+                  <line data-hf-id="hf-p484" x1="1350" y1="1774" x2="1620" y2="1774" marker-end="url(#arc)"/>
+                </g>
+              </g>
+
+              <g data-hf-id="hf-t767" fill="#cfe9ff" font-size="42" letter-spacing="4"
+                 font-family="'DejaVu Sans Mono', monospace">
+                <text data-hf-id="hf-3tfk" x="1140" y="1932">PEGANGAN</text>
+                <text data-hf-id="hf-n9ue" x="1180" y="2420">SELANG</text>
+                <text data-hf-id="hf-pv0v" x="1700" y="1610">TANGKI BAKAR</text>
+                <text data-hf-id="hf-npmg" x="1740" y="2420">ISI 62%</text>
+                <text data-hf-id="hf-v1jh" x="280" y="2420">ALIRAN →</text>
+              </g>
+              <text data-hf-id="hf-wyi2" x="1900" y="1462" fill="#7ef0ff" font-size="46" letter-spacing="6"
+                    font-family="'DejaVu Sans Mono', monospace">02 · ISI · BAYAR · PERGI</text>
+            </g>
+
+            <!-- ===== PANEL D : DARI MANA ===== -->
+            <g data-hf-id="hf-wlqp" id="panelD">
+              <rect data-hf-id="hf-cpdg" x="2420" y="240" width="1960" height="1060" fill="#0e3a66" opacity=".3"
+                    stroke="#a9d8ff" stroke-width="4"/>
+              <text data-hf-id="hf-t4d4" x="2452" y="318" fill="#7ef0ff" font-size="58" letter-spacing="5"
+                    font-family="'DejaVu Sans Mono', monospace" font-weight="700">C · DARI MANA?</text>
+              <line data-hf-id="hf-qpfl" x1="2452" y1="342" x2="3360" y2="342" stroke="#7ef0ff" stroke-width="4"/>
+
+              <g data-hf-id="hf-9o4n" fill="none" stroke="#e6f4ff" stroke-width="6" stroke-linejoin="round">
+                <!-- surface -->
+                <path data-hf-id="hf-rfc8" d="M2460,560 L2760,560 q60,-46 130,0 q70,46 140,0 L4340,560" stroke-width="7"/>
+                <!-- strata -->
+                <rect data-hf-id="hf-3cbd" x="2460" y="560" width="1880" height="170" fill="url(#h45)" fill-opacity=".7"/>
+                <rect data-hf-id="hf-31pc" x="2460" y="730" width="1880" height="170" fill="url(#h135)" fill-opacity=".7"/>
+                <rect data-hf-id="hf-negi" x="2460" y="900" width="1880" height="170" fill="url(#dots)" fill-opacity=".7"/>
+                <rect data-hf-id="hf-lvp2" x="2460" y="1070" width="1880" height="170" fill="url(#h45)" fill-opacity=".45"/>
+                <line data-hf-id="hf-66hh" x1="2460" y1="730" x2="4340" y2="730"/>
+                <line data-hf-id="hf-j5wv" x1="2460" y1="900" x2="4340" y2="900"/>
+                <line data-hf-id="hf-yy9l" x1="2460" y1="1070" x2="4340" y2="1070"/>
+                <line data-hf-id="hf-qh8x" x1="2460" y1="1240" x2="4340" y2="1240"/>
+                <!-- organisms (fosil) -->
+                <g data-hf-id="hf-9uo1" stroke-width="4" opacity=".95">
+                  <ellipse data-hf-id="hf-n543" cx="2760" cy="646" rx="46" ry="24"/>
+                  <ellipse data-hf-id="hf-dj4w" cx="2960" cy="678" rx="34" ry="18"/>
+                  <path data-hf-id="hf-4mqg" d="M3140,640 q26,-26 52,0 q-26,26 -52,0"/>
+                  <ellipse data-hf-id="hf-ld3o" cx="3420" cy="654" rx="42" ry="22"/>
+                  <path data-hf-id="hf-73w2" d="M3640,676 l40,-34 l40,34 l-40,34 z"/>
+                  <ellipse data-hf-id="hf-59a5" cx="3980" cy="646" rx="38" ry="20"/>
+                  <ellipse data-hf-id="hf-arxh" cx="4180" cy="682" rx="30" ry="16"/>
+                  <ellipse data-hf-id="hf-65vw" cx="2860" cy="822" rx="40" ry="20"/>
+                  <ellipse data-hf-id="hf-7t2p" cx="3560" cy="812" rx="36" ry="18"/>
+                </g>
+                <!-- oil pocket -->
+                <path data-hf-id="hf-38xc" d="M3320,960 q180,-70 340,10 q140,70 60,170 q-90,110 -300,60
+                         q-190,-46 -160,-140 q-20,-70 60,-100 z"
+                      fill="#061a30" stroke="#7ef0ff" stroke-width="7"/>
+                <g data-hf-id="hf-3efd" fill="#7ef0ff" stroke="none">
+                  <circle data-hf-id="hf-6mbx" cx="3440" cy="1040" r="9"/><circle data-hf-id="hf-vdkv" cx="3560" cy="1010" r="7"/>
+                  <circle data-hf-id="hf-nfio" cx="3640" cy="1090" r="9"/><circle data-hf-id="hf-8z89" cx="3500" cy="1120" r="7"/>
+                  <circle data-hf-id="hf-wj3q" cx="3620" cy="1170" r="6"/>
+                </g>
+                <!-- big question arrow -->
+                <line data-hf-id="hf-3hnc" x1="2760" y1="392" x2="2760" y2="540" stroke="#7ef0ff" stroke-width="12"
+                      marker-end="url(#arc)"/>
+                <line data-hf-id="hf-76ko" x1="4120" y1="392" x2="4120" y2="540" stroke="#7ef0ff" stroke-width="12"
+                      marker-end="url(#arc)"/>
+                <!-- depth dimension -->
+                <line data-hf-id="hf-o0th" x1="4300" y1="560" x2="4300" y2="1140" stroke-width="4"
+                      marker-start="url(#ar)" marker-end="url(#ar)" opacity=".9"/>
+              </g>
+
+              <text data-hf-id="hf-m398" x="2500" y="470" fill="#7ef0ff" font-size="104" letter-spacing="6"
+                    font-family="'DejaVu Sans Mono', monospace" font-weight="700">DARI MANA?</text>
+              <text data-hf-id="hf-aflr" x="4200" y="470" fill="#7ef0ff" font-size="104"
+                    font-family="'DejaVu Sans Mono', monospace" font-weight="700">?</text>
+
+              <g data-hf-id="hf-0ck5" fill="#cfe9ff" font-size="40" letter-spacing="4"
+                 font-family="'DejaVu Sans Mono', monospace">
+                <text data-hf-id="hf-co4j" x="2480" y="620">PERMUKAAN BUMI</text>
+                <text data-hf-id="hf-e613" x="2480" y="700">SEDIMEN / PLANKTON · TUMBUHAN · HEWAN LAUT</text>
+                <text data-hf-id="hf-rxlw" x="2480" y="868">TEKANAN + PANAS (JUTAAN TAHUN)</text>
+                <text data-hf-id="hf-6dj7" x="2480" y="1040">KANTONG MINYAK MENTAH</text>
+                <text data-hf-id="hf-b6cg" x="2480" y="1210">BATUAN INDUK</text>
+              </g>
+              <text data-hf-id="hf-c2vj" x="4060" y="1330" fill="#7ef0ff" font-size="46" letter-spacing="6"
+                    text-anchor="end" font-family="'DejaVu Sans Mono', monospace">03 · ASAL USUL</text>
+            </g>
+
+            <!-- ===== PANEL C : MESIN ===== -->
+            <g data-hf-id="hf-lq92" id="panelC">
+              <rect data-hf-id="hf-bm99" x="2420" y="1400" width="1960" height="1060" fill="#0e3a66" opacity=".3"
+                    stroke="#a9d8ff" stroke-width="4"/>
+              <text data-hf-id="hf-sgwt" x="2452" y="1478" fill="#7ef0ff" font-size="58" letter-spacing="5"
+                    font-family="'DejaVu Sans Mono', monospace" font-weight="700">D · MESIN &amp; RUANG BAKAR</text>
+              <line data-hf-id="hf-4nrh" x1="2452" y1="1502" x2="3560" y2="1502" stroke="#7ef0ff" stroke-width="4"/>
+
+              <g data-hf-id="hf-a2fo" fill="none" stroke="#e6f4ff" stroke-width="6" stroke-linejoin="round">
+                <!-- cylinder -->
+                <rect data-hf-id="hf-n7wk" x="2640" y="1640" width="440" height="540" fill="url(#h135)" fill-opacity=".35"/>
+                <rect data-hf-id="hf-4f38" x="2614" y="1576" width="492" height="76" fill="#0b2f56"/>
+                <!-- spark plug -->
+                <rect data-hf-id="hf-0kt1" x="2796" y="1470" width="88" height="110" rx="8" fill="#0b2f56"/>
+                <line data-hf-id="hf-kfdq" x1="2840" y1="1580" x2="2840" y2="1636"/>
+                <!-- spark -->
+                <g data-hf-id="hf-y9ri" stroke="#7ef0ff" stroke-width="7" stroke-linecap="round">
+                  <path data-hf-id="hf-oacj" d="M2840,1646 l-46,-30 M2840,1646 l46,-30 M2840,1646 l-52,4 M2840,1646 l52,4
+                           M2840,1646 l-34,40 M2840,1646 l34,40"/>
+                </g>
+                <!-- combustion arrows -->
+                <g data-hf-id="hf-7fmu" stroke="#7ef0ff" stroke-width="5">
+                  <line data-hf-id="hf-ktv7" x1="2720" y1="1700" x2="2700" y2="1770" marker-end="url(#arc)"/>
+                  <line data-hf-id="hf-9kyf" x1="3000" y1="1700" x2="3020" y2="1770" marker-end="url(#arc)"/>
+                </g>
+                <!-- piston + rod + crank -->
+                <rect data-hf-id="hf-sddv" x="2684" y="1830" width="352" height="164" rx="10" fill="#0b2f56"/>
+                <line data-hf-id="hf-gqz9" x1="2860" y1="1994" x2="2860" y2="2206"/>
+                <circle data-hf-id="hf-krjr" cx="2860" cy="2300" r="112"/>
+                <circle data-hf-id="hf-ecqa" cx="2860" cy="2300" r="30" fill="#0b2f56"/>
+                <line data-hf-id="hf-ye58" x1="2860" y1="2300" x2="2932" y2="2214"/>
+                <!-- exhaust -->
+                <path data-hf-id="hf-exe1" d="M3080,1700 h380 q120,0 120,110 v170" stroke-width="10"/>
+                <g data-hf-id="hf-gxch" stroke="#7ef0ff" stroke-width="6" opacity=".95">
+                  <path data-hf-id="hf-3sud" d="M3580,1990 q56,-50 0,-100 q-56,-50 0,-100" marker-end="url(#arc)"/>
+                  <path data-hf-id="hf-6i6v" d="M3660,2020 q56,-50 0,-100 q-56,-50 0,-100" marker-end="url(#arc)"/>
+                </g>
+                <!-- wheel + belt -->
+                <circle data-hf-id="hf-eaw8" cx="3960" cy="2300" r="210"/>
+                <circle data-hf-id="hf-zvw8" cx="3960" cy="2300" r="34" fill="#0b2f56"/>
+                <g data-hf-id="hf-1uct" stroke-width="4">
+                  <line data-hf-id="hf-mo0v" x1="3960" y1="2090" x2="3960" y2="2510"/>
+                  <line data-hf-id="hf-sjev" x1="3750" y1="2300" x2="4170" y2="2300"/>
+                  <line data-hf-id="hf-z1nn" x1="3812" y1="2152" x2="4108" y2="2448"/>
+                  <line data-hf-id="hf-moyb" x1="4108" y1="2152" x2="3812" y2="2448"/>
+                </g>
+                <line data-hf-id="hf-ytrd" x1="2972" y1="2300" x2="3750" y2="2300" stroke-dasharray="40 30" opacity=".8"/>
+              </g>
+
+              <g data-hf-id="hf-ssv6" fill="#cfe9ff" font-size="42" letter-spacing="4"
+                 font-family="'DejaVu Sans Mono', monospace">
+                <text data-hf-id="hf-0r56" x="2960" y="1524">BUSI</text>
+                <text data-hf-id="hf-0pj0" x="3110" y="1710">RUANG BAKAR</text>
+                <text data-hf-id="hf-ypyw" x="3110" y="1920">PISTON</text>
+                <text data-hf-id="hf-8s2g" x="2640" y="2470">POROS ENGKOL</text>
+                <text data-hf-id="hf-eriu" x="3780" y="2600">RODA</text>
+                <text data-hf-id="hf-3wkd" x="3140" y="1662">LEDAKAN</text>
+              </g>
+              <text data-hf-id="hf-905p" x="3320" y="2116" fill="#7ef0ff" font-size="72" font-weight="700"
+                    font-family="'DejaVu Sans Mono', monospace">KE MANA?</text>
+              <text data-hf-id="hf-034n" x="4340" y="1462" fill="#7ef0ff" font-size="46" letter-spacing="6"
+                    text-anchor="end" font-family="'DejaVu Sans Mono', monospace">04 · PEMBAKARAN</text>
+            </g>
+
+            <!-- ===== NOTES BLOCK ===== -->
+            <g data-hf-id="hf-ruvy" id="notes">
+              <rect data-hf-id="hf-4hup" x="220" y="2560" width="2100" height="440" fill="#0e3a66" opacity=".3"
+                    stroke="#a9d8ff" stroke-width="4"/>
+              <text data-hf-id="hf-l557" x="252" y="2634" fill="#7ef0ff" font-size="52" letter-spacing="5"
+                    font-family="'DejaVu Sans Mono', monospace" font-weight="700">CATATAN / NOTES</text>
+              <line data-hf-id="hf-n6d4" x1="252" y1="2656" x2="1000" y2="2656" stroke="#7ef0ff" stroke-width="4"/>
+              <g data-hf-id="hf-zdho" fill="#cfe9ff" font-size="38" letter-spacing="2"
+                 font-family="'DejaVu Sans Mono', monospace">
+                <text data-hf-id="hf-rcle" x="252" y="2740">1. SKEMA SEDERHANA, BUKAN UKURAN TEKNIS.</text>
+                <text data-hf-id="hf-ciyi" x="252" y="2812">2. WAKTU TIAP BAGIAN MENGIKUTI NARASI VO.</text>
+                <text data-hf-id="hf-ylhv" x="252" y="2884">3. SUMBER: BRIF DOKUMENTER "SETETES BENSIN".</text>
+                <text data-hf-id="hf-inou" x="252" y="2956">4. LEMBAR BERIKUT: BAB 02 — APA ITU BENSIN.</text>
+              </g>
+            </g>
+
+            <!-- ===== TITLE BLOCK ===== -->
+            <g data-hf-id="hf-vday" id="titleblock">
+              <rect data-hf-id="hf-cffy" x="2420" y="2560" width="1960" height="440" fill="#0e3a66" opacity=".45"
+                    stroke="#e6f4ff" stroke-width="5"/>
+              <g data-hf-id="hf-sjng" stroke="#a9d8ff" stroke-width="3">
+                <line data-hf-id="hf-y86t" x1="2420" y1="2650" x2="4380" y2="2650"/>
+                <line data-hf-id="hf-a369" x1="2420" y1="2740" x2="4380" y2="2740"/>
+                <line data-hf-id="hf-akip" x1="2420" y1="2830" x2="4380" y2="2830"/>
+                <line data-hf-id="hf-pvvx" x1="2420" y1="2920" x2="4380" y2="2920"/>
+                <line data-hf-id="hf-f4b2" x1="3330" y1="2560" x2="3330" y2="3000"/>
+              </g>
+              <g data-hf-id="hf-j64q" font-family="'DejaVu Sans Mono', monospace">
+                <g data-hf-id="hf-c2tf" fill="#7ef0ff" font-size="42" letter-spacing="4">
+                  <text data-hf-id="hf-e7a2" x="2460" y="2622">PROYEK</text>
+                  <text data-hf-id="hf-9cpj" x="2460" y="2712">LEMBAR</text>
+                  <text data-hf-id="hf-1tmq" x="2460" y="2802">SKALA</text>
+                  <text data-hf-id="hf-uabf" x="2460" y="2892">SUARA</text>
+                  <text data-hf-id="hf-x3na" x="2460" y="2972">DURASI</text>
+                </g>
+                <g data-hf-id="hf-lunb" fill="#e6f4ff" font-size="44">
+                  <text data-hf-id="hf-hf5f" x="3372" y="2624">SETETES BENSIN</text>
+                  <text data-hf-id="hf-tyfp" x="3372" y="2714">01 / 08</text>
+                  <text data-hf-id="hf-c9qx" x="3372" y="2804">1 : 1</text>
+                  <text data-hf-id="hf-qh7m" x="3372" y="2894">BRIAN (ID)</text>
+                  <text data-hf-id="hf-gari" x="3372" y="2974">18.36 DTK</text>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ============ HUD ============ -->
+      <div data-hf-id="hf-ziyo" id="hud" class="clip" data-start="0" data-duration="18.36" data-track-index="1">
+        <svg data-hf-id="hf-evg4" class="brackets" width="1920" height="1080" viewBox="0 0 1920 1080"
+             xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#7ef0ff"
+             stroke-width="5" opacity=".85">
+          <path data-hf-id="hf-8izl" d="M44,124 L44,44 L124,44"/>
+          <path data-hf-id="hf-mr15" d="M1796,44 L1876,44 L1876,124"/>
+          <path data-hf-id="hf-d558" d="M1876,956 L1876,1036 L1796,1036"/>
+          <path data-hf-id="hf-io7i" d="M124,1036 L44,1036 L44,956"/>
+        </svg>
+        <div data-hf-id="hf-2iui" class="meta tlblk">
+          <div data-hf-id="hf-uar7" class="bab">BAB 01</div>
+          <div data-hf-id="hf-fks6" class="ttl">PEMBUKA — PERTANYAAN</div>
+        </div>
+        <div data-hf-id="hf-780e" class="meta trblk">
+          SETETES BENSIN<br data-hf-id="hf-x5px" />SKEMA TEKNIK · SHEET 01
+        </div>
+        <div data-hf-id="hf-c5h5" class="meta blblk">SKALA 1:1 · 1920×1080</div>
+        <div data-hf-id="hf-w8ia" class="meta brblk">CAM 01 · BLUEPRINT</div>
+      </div>
+
+      <div data-hf-id="hf-z877" id="c0" class="clip" data-start="0" data-duration="2.43">SETETES BENSIN — SATU SKEMA BESAR</div>
+      <div data-hf-id="hf-lgzg" id="cA" class="clip" data-start="2.43" data-duration="4.50">JUTAAN KENDARAAN BERHENTI DI TEMPAT YANG SAMA</div>
+      <div data-hf-id="hf-u8js" id="cB" class="clip" data-start="6.93" data-duration="3.87">MENGISI · MEMBAYAR · LALU PERGI</div>
+      <div data-hf-id="hf-8e72" id="cD" class="clip" data-start="10.80" data-duration="5.30">PERNAHKAH BERTANYA: DARI MANA CAIRAN INI?</div>
+      <div data-hf-id="hf-e1bl" id="cC" class="clip" data-start="16.10" data-duration="2.26">DAN KE MANA IA PERGI SETELAH MENYALA?</div>
+
+      <div data-hf-id="hf-4j3p" id="barwrap" class="clip" data-start="0" data-duration="18.36" data-track-index="2">
+        <div data-hf-id="hf-2to0" id="bar"></div>
+      </div>
+      <div data-hf-id="hf-xl8p" id="vig"></div>
+
+      <audio data-hf-id="hf-jz4l" id="vo" src="../assets/vo/bab1-pembuka.mp3"
+             data-start="0" data-duration="18.36" data-track-index="9" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const VW = 1920, VH = 1080;
+
+      // kamera virtual: fokuskan titik (cx,cy) di layar, dengan skala s
+      function cam(cx, cy, s) {
+        return { x: VW / 2 - cx * s, y: VH / 2 - cy * s, scale: s };
+      }
+      const F = {
+        wide: [2300, 1550, 0.34],
+        A:    [1270,  770, 0.78],
+        B:    [1270, 1930, 0.78],
+        D:    [3300,  770, 0.78],
+        Dt:   [3300,  930, 1.16],
+        C:    [3300, 1930, 0.78]
+      };
+      function go(k, at, dur) {
+        const t = cam(F[k][0], F[k][1], F[k][2]);
+        tl.to("#world", { x: t.x, y: t.y, scale: t.s, duration: dur, ease: "power2.inOut" }, at);
+      }
+      function spot(id, at, out) {
+        tl.fromTo("#" + id, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out" }, at);
+        tl.to("#" + id, { opacity: 0, duration: 0.4, ease: "power1.in" }, out);
+      }
+
+      const w0 = cam(F.wide[0], F.wide[1], F.wide[2]);
+      gsap.set("#world", { transformOrigin: "0px 0px", x: w0.x, y: w0.y, scale: w0.s, opacity: 0 });
+      tl.to("#world", { opacity: 1, duration: 0.9, ease: "power1.out" }, 0);
+
+      // --- pelayaran kamera, diselaraskan dengan jeda kalimat (beats.json) ---
+      go("A", 1.13, 1.30);   // sampai 2.43  "jutaan kendaraan berhenti..."
+      go("B", 5.68, 1.25);   // sampai 6.93  "Kita mengisi, membayar..."
+      go("D", 9.53, 1.27);   // sampai 10.80 "Tapi pernahkah kita bertanya"
+      go("Dt", 12.56, 1.30); // sampai 13.86 "dari mana cairan ini datang"
+      go("C", 14.85, 1.25);  // sampai 16.10 "ke mana ia pergi setelah menyala"
+      go("wide", 17.30, 1.06); // tarik mundur ke skema penuh
+
+      spot("spotA", 2.43, 5.68);
+      spot("spotB", 6.93, 9.53);
+      spot("spotD", 10.80, 14.85);
+      spot("spotC", 16.10, 17.30);
+
+      tl.fromTo("#bar", { scaleX: 0 },
+                { scaleX: 1, duration: 18.36, ease: "none", transformOrigin: "0px 50%" }, 0);
+
+      window.__timelines["bab1"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pensil"
+version = "0.1.0"
+description = "Framework video whiteboard live-draw follow-cam (Termux + hyperframes + GSAP)"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[project.scripts]
+pensil = "pensil.cli:main"
+
+[tool.setuptools]
+packages = ["pensil"]
+
+[tool.setuptools.package-data]
+pensil = ["resources/*.mjs"]

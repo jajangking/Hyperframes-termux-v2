@@ -1,0 +1,14 @@
+{
+  "name": "reels",
+  "canvas": { "w": 1080, "h": 1920 },
+  "paths": {
+    "vo": "assets/vo",
+    "audio": "assets/audio",
+    "work": "assets/vo",
+    "compositions": "compositions",
+    "gsap": "assets/gsap.min.js",
+    "work_prefix": "../assets/vo",
+    "audio_prefix": "../assets/audio"
+  },
+  "scenes": ["scenes/bab1.py", "scenes/bab2.py", "scenes/bab3.py", "scenes/bab4.py", "scenes/bab5.py"]
+}
